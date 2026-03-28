@@ -50,7 +50,7 @@ app.use(express.json());
 const adminRoutes = require('./routes/admin');
 
 // Use admin routes
-app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/gymDB')

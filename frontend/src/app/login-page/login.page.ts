@@ -1,0 +1,50 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+import { LoginService } from './service/login.service';
+import { Router } from '@angular/router';
+
+@Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
+  templateUrl: './login.page.html',
+  styleUrl: './login.page.scss'
+})
+export class LoginPage implements OnInit {
+  public loginForm: FormGroup;
+  public hideInputPassword = true;
+  private loginService = inject(LoginService);
+  private router = inject(Router);
+
+  constructor() {
+    this.loginForm = new FormGroup({
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required])
+    });
+  }
+
+  ngOnInit(): void {
+  }
+
+  public async login() {
+    this.loginForm.disable();
+    try {
+      const response = await firstValueFrom(this.loginService.login(this.loginForm.value));
+      if (response && response.admin) {
+        console.log(response, 'response');
+
+        localStorage.setItem('accessToken', response.token);
+        await this.router.navigate(['/dashboard', response.admin]);
+      }
+    } catch (err: unknown) {
+      console.error(err);
+      if (err && typeof err === 'object' && 'status' in err) {
+      }
+    }
+    this.loginForm.enable();
+  }
+}

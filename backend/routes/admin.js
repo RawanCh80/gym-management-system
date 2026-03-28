@@ -14,18 +14,17 @@ router.get('/test', (req, res) => {
 
 // Test POST route
 router.post('/register', async (req, res) => {
-    const {username, email, password} = req.body;
+    const {username, password} = req.body;
 
     try {
-        // Check if username/email already exists
-        const existingAdmin = await Admin.findOne({$or: [{username}, {email}]});
-        if (existingAdmin) return res.status(400).json({error: 'Username or email already exists'});
+        const existingAdmin = await Admin.findOne({$or: [{username}]});
+        if (existingAdmin) return res.status(400).json({error: 'Username already exists'});
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new admin
-        const newAdmin = new Admin({username, email, password: hashedPassword});
+        const newAdmin = new Admin({username, password: hashedPassword});
         await newAdmin.save();
 
         res.status(201).json({message: 'Admin registered successfully'});
@@ -36,10 +35,10 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const {email, password} = req.body;
+    const {username, password} = req.body;
 
     try {
-        const admin = await Admin.findOne({email});
+        const admin = await Admin.findOne({username});
         if (!admin) return res.status(404).json({error: 'Admin not found'});
 
         const isMatch = await bcrypt.compare(password, admin.password);
@@ -50,7 +49,7 @@ router.post('/login', async (req, res) => {
         res.json({
             message: 'Login successful!',
             token: token,
-            admin: {id: admin._id, username: admin.username, email: admin.email}
+            admin: {id: admin._id, username: admin.username}
         });
     } catch (err) {
         console.error(err);

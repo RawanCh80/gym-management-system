@@ -1,0 +1,250 @@
+```html
+<div class="member-template-creation-container">
+  <div class="title-bar-container">
+    <div class="title">
+      Create Member
+    </div>
+
+    <div class="buttons-container">
+      <button
+        type="button"
+        (click)="dismissModal()"
+        class="dismiss-button">
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        (click)="createMember()"
+        class="create-button">
+        Create
+      </button>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <form [formGroup]="productTemplateForCreationFormGroup">
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label>
+          Full Name
+        </label>
+        <input
+          type="text"
+          placeholder="Full name ex: Rawan Cheaito"
+          formControlName="fullName">
+      </div>
+
+      <!-- Phone Number -->
+      <div class="form-group">
+        <label>
+          Phone Number
+        </label>
+        <input
+          type="text"
+          placeholder="Phone number ex: 01010101010"
+          formControlName="phone">
+      </div>
+
+      <!-- Membership Name -->
+      <div class="form-group">
+        <label>
+          Membership Name
+        </label>
+        <input
+          type="text"
+          placeholder="Membership ex: Gold"
+          formControlName="membershipName">
+      </div>
+
+      <!-- Duration Days -->
+      <div class="form-group">
+        <label>
+          Duration (Days)
+        </label>
+        <input
+          type="number"
+          placeholder="ex: 30"
+          formControlName="durationDays">
+      </div>
+
+      <!-- Number of Sessions -->
+      <div class="form-group">
+        <label>
+          Number of Sessions
+        </label>
+        <input
+          type="number"
+          placeholder="ex: 12"
+          formControlName="numberOfSessions">
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label>
+          Price
+        </label>
+        <input
+          type="number"
+          placeholder="ex: 50"
+          formControlName="price">
+      </div>
+
+      <!-- Membership Start Date -->
+      <div class="form-group">
+        <label>
+          Membership Start Date
+        </label>
+        <input
+          type="date"
+          formControlName="membershipStart">
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label>
+          Notes
+        </label>
+        <textarea
+          rows="4"
+          placeholder="Write notes here..."
+          formControlName="notes">
+        </textarea>
+      </div>
+
+      <!-- Active Toggle -->
+      <div class="form-group toggle-group">
+        <label>
+          Active Membership
+        </label>
+        <input
+          type="checkbox"
+          formControlName="isActive">
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!--      <div class="products-container">-->
+      <!--        <div *ngFor="let product of productsFormArray.controls; let i = index"-->
+      <!--             class="add-product-container">-->
+      <!--          <form [formGroup]="product">-->
+      <!--            <div class="product-label">-->
+      <!--              <h3>{{ 'products.product.label' | translate }} {{ i + 1 }}</h3>-->
+      <!--              <div *ngIf="i !== 0" class="close-icon">-->
+      <!--                <fa-icon (click)="presentRemoveProductAlert(i)"-->
+      <!--                         [icon]="['fal','circle-xmark']"-->
+      <!--                         class="icon"></fa-icon>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <div class="label-with-input">-->
+      <!--              <label>-->
+      <!--                {{ 'products.product.name' | translate }}-->
+      <!--              </label>-->
+      <!--              <input [placeholder]="'products.product.placeHolders.productsName' | translate"-->
+      <!--                     [type]="'text'"-->
+      <!--                     formControlName="name">-->
+
+      <!--            </div>-->
+      <!--            <div class="label-with-input">-->
+      <!--              <label>-->
+      <!--                {{ 'products.product.type' | translate }}-->
+      <!--              </label>-->
+      <!--              <input [placeholder]="'products.product.placeHolders.type' | translate"-->
+      <!--                     [type]="'text'"-->
+      <!--                     formControlName="type">-->
+
+      <!--            </div>-->
+      <!--            <div class="text-area-with-label">-->
+      <!--              <label>-->
+      <!--                {{ 'products.product.description'| translate }}-->
+      <!--                <textarea [placeholder]="'products.product.placeHolders.productDescription' | translate"-->
+      <!--                          formControlName="description">-->
+      <!--							</textarea>-->
+      <!--              </label>-->
+      <!--            </div>-->
+      <!--            <div class="label-with-input">-->
+      <!--              <label>-->
+      <!--                {{ 'products.product.price'| translate }}-->
+      <!--              </label>-->
+      <!--              <input [placeholder]="'products.product.placeHolders.productPrice' | translate"-->
+      <!--                     [type]="'number'"-->
+      <!--                     formControlName="price">>-->
+
+      <!--            </div>-->
+      <!--            &lt;!&ndash;			<label>&ndash;&gt;-->
+      <!--            &lt;!&ndash;				Image URL:&ndash;&gt;-->
+      <!--            &lt;!&ndash;				<input [type]="'text'" formControlName="imageUrl">&ndash;&gt;-->
+      <!--            &lt;!&ndash;			</label>&ndash;&gt;-->
+      <!--            <div class="service-container">-->
+      <!--              <div *ngFor="let service of getServiceFormArray(product).controls; let i = index">-->
+      <!--                <div class="service-label">-->
+      <!--                  <div>-->
+      <!--                    <h4>{{ 'products.services.service' | translate }} {{ i + 1 }}</h4>-->
+      <!--                  </div>-->
+      <!--                  <div *ngIf="i !== 0" class="close-icon">-->
+      <!--                    <fa-icon (click)="presentRemoveServiceAlert(i,product)"-->
+      <!--                             [icon]="['fal','circle-xmark']"-->
+      <!--                             class="icon"></fa-icon>-->
+      <!--                  </div>-->
+      <!--                </div>-->
+      <!--                <form [formGroup]="service">-->
+      <!--                  <div class="label-with-input">-->
+      <!--                    <label>-->
+      <!--                      {{ 'products.services.serviceName'| translate }}-->
+      <!--                    </label>-->
+      <!--                    <input-->
+      <!--                      [placeholder]="'products.services.placeHolders.name' | translate"-->
+      <!--                      [type]="'text'"-->
+      <!--                      formControlName="name">-->
+
+      <!--                  </div>-->
+      <!--                  <div class="text-area-with-input">-->
+      <!--                    <label>-->
+      <!--                      {{ 'products.services.serviceDescription'| translate }}-->
+      <!--                      <textarea-->
+      <!--                        [placeholder]="'products.services.placeHolders.description' | translate"-->
+      <!--                        formControlName="description"></textarea>-->
+      <!--                    </label>-->
+      <!--                  </div>-->
+      <!--                  <div class="label-with-input">-->
+      <!--                    <label>-->
+      <!--                      {{ 'products.services.servicePrice'| translate }}-->
+      <!--                    </label>-->
+      <!--                    <input-->
+      <!--                      [placeholder]="'products.services.placeHolders.price' | translate"-->
+      <!--                      [type]="'number'"-->
+      <!--                      formControlName="price">-->
+
+      <!--                  </div>-->
+      <!--                  <div class="label-with-checkbox">-->
+      <!--                    <label>-->
+      <!--                      {{ 'products.services.mandatory'| translate }}-->
+      <!--                      <mat-checkbox formControlName="mandatory"></mat-checkbox>-->
+      <!--                    </label>-->
+      <!--                  </div>-->
+      <!--                </form>-->
+      <!--              </div>-->
+      <!--              <div class="add-service-button">-->
+      <!--                <button (click)="addService(product)">-->
+      <!--                  {{ 'products.services.addService'| translate }}-->
+      <!--                </button>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </form>-->
+      <!--        </div>-->
+      <!--        <div class="add-product-button">-->
+      <!--          <button (click)="addSession()">-->
+      <!--            {{ 'products.product.addProduct'| translate }}-->
+      <!--          </button>-->
+      <!--        </div>-->
+      <!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--TO should fix the creation cannot create if  i dont fill-->
+<!--the validated
+if something is empty its taking default value empty string or some thing  like that should fix this-->

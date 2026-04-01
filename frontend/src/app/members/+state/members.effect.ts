@@ -1,19 +1,21 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { MembersService } from '../service/members.service';
-import { MemberBo } from '../bo/member.bo';
-import { Injectable } from '@angular/core';
+import { MemberDetailsBo } from '../bo/member-details.bo';
+import { inject, Injectable } from '@angular/core';
 import { MembersActions } from './members.action';
+import { MemberItemBo } from '../bo/member-item.bo';
 
 @Injectable()
-export class MembersEffect {
-
+export class  MembersEffect {
+  private actions$ = inject(Actions);
+  private membersService = inject(MembersService);
   public loadMembers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MembersActions.loadMembers),
-      switchMap((action) =>  // destructure token directly
+      switchMap((action) =>
         this.membersService.getMembers(action.token).pipe(
-          map((membersList: MemberBo[]) =>
+          map((membersList: MemberItemBo[]) =>
             MembersActions.loadMembersSuccess({ members: membersList })
           ),
           catchError((error) =>
@@ -32,7 +34,7 @@ export class MembersEffect {
           return this.membersService
             .getMemberDetails(action.id, action.token)
             .pipe(
-              map((memberDetails: MemberBo) => {
+              map((memberDetails: MemberDetailsBo) => {
                 return MembersActions.loadMemberDetailsSuccess({ member: memberDetails });
               }),
               catchError((error) => {
@@ -74,7 +76,7 @@ export class MembersEffect {
           return this.membersService
             .updateMember(action.id, action.member, action.token)
             .pipe(
-              switchMap((memberDetailsBo: MemberBo) => {
+              switchMap((memberDetailsBo: MemberDetailsBo) => {
                 return [
                   MembersActions.updateMemberSuccess(),
                   MembersActions.resetMemberDetailsStatus(),
@@ -97,7 +99,7 @@ export class MembersEffect {
           return this.membersService
             .createMember(action.member, action.token)
             .pipe(
-              switchMap((member: MemberBo) => {
+              switchMap((member: MemberDetailsBo) => {
                 return [
                   MembersActions.createMemberSuccess(),
                   MembersActions.resetMemberDetailsStatus(),
@@ -111,8 +113,4 @@ export class MembersEffect {
         })
       )
   );
-
-  constructor(private actions$: Actions,
-              private membersService: MembersService) {
-  }
 }

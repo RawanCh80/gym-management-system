@@ -1,12 +1,12 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { MembersActions } from './members.action';
 import { MembersStatusEnum } from './enums/members-status.enum';
-import { MemberBo } from '../bo/member.bo';
+import { MemberItemBo } from '../bo/member-item.bo';
 
 export const MEMBERS_KEY = 'membersKey';
 
 export interface MembersState {
-  readonly [MEMBERS_KEY]: MemberBo[];
+  readonly [MEMBERS_KEY]: MemberItemBo[];
   readonly status: MembersStatusEnum;
   readonly error: Error | null;
 }
@@ -16,7 +16,7 @@ const initialMembersState: MembersState = {
   status: MembersStatusEnum.pending,
   error: null
 };
-export const membersReducers = createReducer<MembersState, Action>(initialMembersState,
+export const membersReducer = createReducer<MembersState, Action>(initialMembersState,
   on(MembersActions.loadMembers, (state: MembersState) => {
     return {
       ...state,

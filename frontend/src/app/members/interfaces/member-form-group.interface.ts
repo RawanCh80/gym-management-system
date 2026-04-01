@@ -2,7 +2,7 @@ export interface MemberFormGroupInterface {
   _id?: string;
   fullName: string;
   phone: string;
-  membershipName: string;
+  membershipName?: string;
   durationDays: number;
   numberOfSessions: number;
   price: number;

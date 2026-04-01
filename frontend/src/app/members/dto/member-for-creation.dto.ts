@@ -12,7 +12,7 @@ export class MemberForCreationDto {
     return {
       fullName: this.formData.fullName,
       phone: this.formData.phone,
-      membershipName: this.formData.membershipName,
+      membershipName: this.formData.membershipName ?? '',
       durationDays: this.formData.durationDays,
       numberOfSessions: this.formData.numberOfSessions,
       price: this.formData.price,

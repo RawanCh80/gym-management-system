@@ -1,6 +1,6 @@
 import { MemberInterface } from '../../_clients/members/interface/members.interface';
 
-export class MemberBo {
+export class MemberDetailsBo {
   id: string;
   fullName: string;
   phone: string;

@@ -1,22 +1,22 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { MemberBo } from '../bo/member.bo';
+import { MemberDetailsBo } from '../bo/member-details.bo';
 import { MembersStatusEnum } from './enums/members-status.enum';
 import { MembersActions } from './members.action';
 
-export const MEMBERS_DETAILS_KEY = 'memberDetailsKey';
+export const MEMBER_DETAILS_KEY = 'memberDetailsKey';
 
 export interface MemberDetailsState {
-  readonly [MEMBERS_DETAILS_KEY]: MemberBo | null;
+  readonly [MEMBER_DETAILS_KEY]: MemberDetailsBo | null;
   readonly status: MembersStatusEnum;
   readonly error: Error | null;
 }
 
 const initialMemberDetailsState: MemberDetailsState = {
-  [MEMBERS_DETAILS_KEY]: null,
+  [MEMBER_DETAILS_KEY]: null,
   status: MembersStatusEnum.pending,
   error: null
 };
-export const memberDetailsReducers = createReducer<MemberDetailsState, Action>(initialMemberDetailsState,
+export const memberDetailsReducer = createReducer<MemberDetailsState, Action>(initialMemberDetailsState,
   on(MembersActions.resetMemberDetailsStatus, (state) => {
       return {
         ...state,
@@ -35,7 +35,7 @@ export const memberDetailsReducers = createReducer<MemberDetailsState, Action>(i
   on(MembersActions.loadMemberDetailsSuccess, (state: MemberDetailsState, { member }) => {
       return {
         ...state,
-        [MEMBERS_DETAILS_KEY]: member,
+        [MEMBER_DETAILS_KEY]: member,
         status: MembersStatusEnum.loadDetailsSuccess
       };
     }

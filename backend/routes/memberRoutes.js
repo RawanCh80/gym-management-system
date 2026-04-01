@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Member = require('../models/Member');
-const authMiddleware = require('../middlewares/auth');
+const authMiddleware = require('../middlewares/adminAuth');
 
 console.log('member routes file loaded');
 

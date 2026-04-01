@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { MemberBo } from '../bo/member.bo';
+import { MemberDetailsBo } from '../bo/member-details.bo';
 import { MembersClient } from '../../_clients/members/members.client';
 import { MemberInterface } from '../../_clients/members/interface/members.interface';
 import { MemberForUpdateDto } from '../dto/member-for-update.dto';
@@ -17,22 +17,22 @@ export class MembersService {
     return this.membersClient.createMember(memberDto.toJSON(), token);
   }
 
-  public getMembers(token: string): Observable<MemberBo[]> {
+  public getMembers(token: string): Observable<MemberDetailsBo[]> {
     return this.membersClient
       .getAllMembers(token)
       .pipe(
         map((members: MemberInterface[]) =>
-          members.map(member => new MemberBo(member))
+          members.map(member => new MemberDetailsBo(member))
         )
       );
   }
 
-  public getMemberDetails(id: string, token: string): Observable<MemberBo> {
+  public getMemberDetails(id: string, token: string): Observable<MemberDetailsBo> {
     return this.membersClient
       .getMemberById(id, token)
       .pipe(
         map((member: MemberInterface) =>
-          new MemberBo(member))
+          new MemberDetailsBo(member))
       );
   }
 

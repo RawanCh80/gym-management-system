@@ -1,46 +1,36 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
-    <h2>Members</h2>
+    <h2>Gyms</h2>
     <div class="dashboard-actions">
       <input
         type="text"
-        placeholder="Search members..."
+        placeholder="Search gyms..."
         [(ngModel)]="searchQuery"
-        (input)="onSearchMembers()"
+        (input)="onSearchGyms()"
       />
-      <button class="btn add-member" (click)="onAddMember()">+ Add Member</button>
+      <button class="btn add-gym" (click)="onAddGym()">+ Add Gym</button>
       <button class="btn logout" (click)="onLogout()">Logout</button>
     </div>
   </div>
 
   <div class="dashboard-content">
-    @if(filteredMembers?.length) {
+    @if (filteredGyms?.length) {
       <ng-container>
-        @for (member of filteredMembers; track member.id) {
-          <div class="member-card">
-            <div class="member-name">
-              name:  {{ member.fullName }}
+        @for (gym of filteredGyms; track gym.id) {
+          <div class="gym-card"
+               (click)="navigateToGymDetails(gym.id)">
+            <div class="gym-name">
+              name:  {{ gym.gymName }}
             </div>
-            <div class="member-sessions" v>
-              nb of sessions: {{ member?.numberOfSessions }}
+            <div class="gym-owner-name">
+              nb of sessions: {{ gym?.ownerName }}
+            </div>
+            <div class="gym-phone-number">
+              nb of sessions: {{ gym?.phone }}
             </div>
           </div>
         }
       </ng-container>
     }
-<!--    <ng-container *ngrxLet="membersListSelected$ | async as membersDetailsState">-->
-<!--      @if (membersDetailsState?.status === MembersStatusEnum.loadSuccess) {-->
-<!--        @for (member of membersDetailsState![MEMBERS_KEY]; track member.id) {-->
-<!--          <div class="member-card">-->
-<!--            <div class="member-name">-->
-<!--              name:  {{ member.fullName }}-->
-<!--            </div>-->
-<!--            <div class="member-sessions" v>-->
-<!--              nb of sessions: {{ member?.numberOfSessions }}-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        }-->
-<!--      }-->
-<!--    </ng-container>-->
   </div>
 </div>

@@ -34,11 +34,11 @@ export class PortalAdminLoginPage implements OnInit {
     this.loginForm.disable();
     try {
       const response = await firstValueFrom(this.superAdminLoginService.login(this.loginForm.value));
-      if (response && response.admin) {
+      if (response) {
         console.log(response, 'response');
 
         localStorage.setItem('accessToken', response.token);
-        await this.router.navigate(['/super-admin-dashboard', response.admin]);
+        await this.router.navigate(['/portal-admin']);
       }
     } catch (err: unknown) {
       console.error(err);

@@ -3,7 +3,6 @@ const router = express.Router();
 const SuperAdmin = require('../models/SuperAdmin');
 const jwt = require('jsonwebtoken');
 
-// SuperAdmin login
 router.post('/login', async (req, res) => {
 	const { username, password } = req.body;
 
@@ -15,7 +14,7 @@ router.post('/login', async (req, res) => {
 		if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
 
 		// Generate JWT token
-		const token = jwt.sign({ id: admin._id }, 'YOUR_SECRET_KEY', { expiresIn: '1d' });
+		const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
 		res.json({ message: 'Login successful', token });
 	} catch (err) {

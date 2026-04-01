@@ -12,6 +12,9 @@ import { MEMBER_DETAILS_KEY, memberDetailsReducer } from './members/+state/membe
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { GymsEffect } from './gyms/+state/gyms.effect';
+import { GYMS_KEY, gymsReducer } from './gyms/+state/gyms.reducer';
+import { GYM_DETAILS_KEY, gymDetailsReducer } from './gyms/+state/gyms-details.reducer';
 
 export function initializeFaIconLibrary(library: FaIconLibrary) {
   return () => {
@@ -20,12 +23,15 @@ export function initializeFaIconLibrary(library: FaIconLibrary) {
 }
 
 export const bootstrapEffectList = [
-  MembersEffect
+  MembersEffect,
+  GymsEffect
 ]
 
 export const reducers = {
   [MEMBER_DETAILS_KEY]: memberDetailsReducer,
-  [MEMBERS_KEY]: membersReducer
+  [MEMBERS_KEY]: membersReducer,
+  [GYMS_KEY]: gymsReducer,
+  [GYM_DETAILS_KEY]: gymDetailsReducer,
 }
 
 export const appConfig: ApplicationConfig = {

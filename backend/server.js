@@ -18,6 +18,9 @@ console.log("✅ memberRoutes imported");
 app.use('/members', memberRoutes);
 console.log("📌 /members route registered");
 
+
+const superAdminAuthRoutes = require('./routes/superAdminAuth');
+app.use('/super-admin', superAdminAuthRoutes);
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/gymDB')
     .then(() => console.log('MongoDB connected'))

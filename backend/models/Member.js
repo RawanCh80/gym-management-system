@@ -13,7 +13,12 @@ const memberSchema = new mongoose.Schema({
     membershipEnd: Date,
 
     isActive: {type: Boolean, default: true},
-    notes: String
+    notes: String,
+    gymId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Gym',
+        required: true
+    }
 
 }, {timestamps: true});
 

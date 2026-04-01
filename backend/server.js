@@ -9,15 +9,18 @@ app.use(express.json());
 
 // Import admin routes
 const adminRoutes = require('./routes/admin');
-    // Use admin routes
+// Use admin routes
 
-app.use('/admin', adminRoutes);
+app.use('/admins', adminRoutes);
 const memberRoutes = require('./routes/memberRoutes');
 console.log("✅ memberRoutes imported");
 
 app.use('/members', memberRoutes);
 console.log("📌 /members route registered");
 
+
+const gymRoutes = require('./routes/gymRoutes');
+app.use('/gyms', gymRoutes);
 
 const superAdminAuthRoutes = require('./routes/superAdminAuth');
 app.use('/super-admin', superAdminAuthRoutes);

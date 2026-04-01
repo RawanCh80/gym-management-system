@@ -7,7 +7,7 @@ import { RegisterFormInterface } from '../../reigister-page/interface/register-f
 @Injectable({ providedIn: 'root' })
 
 export class LoginClient {
-  private readonly API_URL = 'http://localhost:3000/admin';
+  private readonly API_URL = 'http://localhost:3000/admins';
 
   constructor(private http: HttpClient) {
   }

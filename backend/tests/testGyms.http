@@ -1,0 +1,63 @@
+# =============================================================================
+# GYM TEST FILE — CRUD Operations
+# REST Client extension in VS Code
+# Routes mounted at: /gyms
+# =============================================================================
+
+@baseUrl = http://localhost:3000/gyms
+
+
+### Create a Gym
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "gymName": "FitZone",
+  "ownerName": "Rawan Cheaito",
+  "phone": "+96170000000",
+  "email": "fitzone@gmail.com",
+  "address": "Beirut, Lebanon",
+  "subscriptionPlan": "premium"
+}
+
+###
+
+### Create another Gym
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "gymName": "PowerGym",
+  "ownerName": "Ali Mansour",
+  "phone": "+96170000001",
+  "email": "powergym@gmail.com",
+  "address": "Beirut, Lebanon",
+  "subscriptionPlan": "basic"
+}
+
+### Update Gym (replace <GYM_ID> with actual _id)
+PUT {{baseUrl}}/<GYM_ID>
+Content-Type: application/json
+
+{
+  "gymName": "FitZone Updated",
+  "ownerName": "Rawan Cheaito",
+  "phone": "+96170009999",
+  "email": "fitzone@gmail.com",
+  "address": "Beirut, Lebanon",
+  "subscriptionPlan": "elite",
+  "isActive": false
+}
+
+### Expected: 200 — returns updated gym
+### Get All Gyms
+GET {{baseUrl}}
+# Expected: 200 — returns array of gyms
+
+### Get One Gym (replace <GYM_ID> with actual _id from GET all gyms)
+GET {{baseUrl}}/<GYM_ID>
+# Expected: 200 — returns single gym
+
+### Delete One Gym (replace <GYM_ID> with actual _id)
+DELETE {{baseUrl}}/69cd3d91a93e2c01af8444c6
+# Expected: 200 — returns deleted gym

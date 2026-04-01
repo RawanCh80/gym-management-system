@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const gymSchema = new mongoose.Schema({
     gymName: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
 
     ownerName: {
@@ -11,16 +12,18 @@ const gymSchema = new mongoose.Schema({
     },
 
     phone: {
-        type: String
+        type: String,
+        required: true
     },
 
     email: {
         type: String,
-        unique: true
+        required: true
     },
 
     address: {
-        type: String
+        type: String,
+        required: true
     },
 
     subscriptionPlan: {
@@ -32,6 +35,6 @@ const gymSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
-}, { timestamps: true });
+}, {timestamps: true});
 
 module.exports = mongoose.model('Gym', gymSchema);

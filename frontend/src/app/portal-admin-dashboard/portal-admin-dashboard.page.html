@@ -1,0 +1,46 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>Members</h2>
+    <div class="dashboard-actions">
+      <input
+        type="text"
+        placeholder="Search members..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearchMembers()"
+      />
+      <button class="btn add-member" (click)="onAddMember()">+ Add Member</button>
+      <button class="btn logout" (click)="onLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    @if(filteredMembers?.length) {
+      <ng-container>
+        @for (member of filteredMembers; track member.id) {
+          <div class="member-card">
+            <div class="member-name">
+              name:  {{ member.fullName }}
+            </div>
+            <div class="member-sessions" v>
+              nb of sessions: {{ member?.numberOfSessions }}
+            </div>
+          </div>
+        }
+      </ng-container>
+    }
+<!--    <ng-container *ngrxLet="membersListSelected$ | async as membersDetailsState">-->
+<!--      @if (membersDetailsState?.status === MembersStatusEnum.loadSuccess) {-->
+<!--        @for (member of membersDetailsState![MEMBERS_KEY]; track member.id) {-->
+<!--          <div class="member-card">-->
+<!--            <div class="member-name">-->
+<!--              name:  {{ member.fullName }}-->
+<!--            </div>-->
+<!--            <div class="member-sessions" v>-->
+<!--              nb of sessions: {{ member?.numberOfSessions }}-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        }-->
+<!--      }-->
+<!--    </ng-container>-->
+  </div>
+</div>

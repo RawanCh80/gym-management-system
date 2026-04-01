@@ -19,17 +19,17 @@ import { MatDialog } from '@angular/material/dialog';
     ReactiveFormsModule,
     FormsModule
   ],
-  templateUrl: './dashboard.page.html',
-  styleUrl: './dashboard.page.scss'
+  templateUrl: './portal-admin-dashboard.page.html',
+  styleUrl: './portal-admin-dashboard.page.scss'
 })
-export class DashboardPage implements OnInit, OnDestroy {
+export class PortalAdminDashboardPage implements OnInit, OnDestroy {
   protected store = inject(Store);
   protected matDialog = inject(MatDialog);
   private cdr = inject(ChangeDetectorRef);
   protected subscription$ = new Subscription();
   private destroy$ = new Subject<void>();
   private router = inject(Router);
-  protected membersListSelected$ = this.store.pipe(select(selectMembersList));
+  protected gymsListSelected$ = this.store.pipe(select(selectGymsList));
   accessToken: string | null = null;
   searchQuery: string = '';
   filteredMembers: MemberItemBo[] = [];

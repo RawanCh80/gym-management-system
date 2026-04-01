@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { LoginFormInterface } from '../../login-page/interface/login-form.interface';
+import { LoginFormInterface } from '../../login/interface/login-form.interface';
 import { HttpClient } from '@angular/common/http';
 import { RegisterFormInterface } from '../../reigister-page/interface/register-form.interface';
 
 @Injectable({ providedIn: 'root' })
 
 export class LoginClient {
-  private readonly API_URL = 'http://localhost:3000/admin';
+  private readonly API_URL = 'http://localhost:3000/admins';
 
   constructor(private http: HttpClient) {
   }

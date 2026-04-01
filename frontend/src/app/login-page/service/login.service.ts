@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { LoginFormInterface } from '../interface/login-form.interface';
-import { AuthDto } from '../dto/auth.dto';
+import { LoginFormInterface } from '../../login/interface/login-form.interface';
+import { AuthDto } from '../../login/dto/auth.dto';
 import { LoginClient } from '../../_clients/login/login.client';
 import { RegisterFormInterface } from '../../reigister-page/interface/register-form.interface';
 import { RegisterDto } from '../../reigister-page/dto/register.dto';

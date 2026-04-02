@@ -2,8 +2,9 @@
   <div class="login-card">
     <div class="section">
       <div class="header">
-        <h1 class="title">Perform By Nour Cheaito</h1>
-        <p class="subtitle">Sign in </p>
+        <div class="icon"> <fa-icon [icon]="['fas','dumbbell']"></fa-icon></div>
+        <h1 class="title">Gym Admin Login</h1>
+        <p class="subtitle">Manage your members and memberships</p>
       </div>
 
       <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">

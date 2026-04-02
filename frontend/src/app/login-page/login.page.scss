@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: #f1f5f9;
+  background: #f2f4f6;
   padding: 1rem;
 
   @media (max-width: 768px) {
@@ -17,7 +17,7 @@
   }
 
   .login-card {
-    background: #ffffff;
+    background: #f7f9fb;
     border: 1px solid #e2e8f0;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
     border-radius: 24px;
@@ -58,9 +58,26 @@
     .header {
       margin-bottom: 1.5rem;
 
+      //.icon, .title, .subtitle {
+      //  display: flex;
+      //  align-items: center;
+      //}
+
+      .icon {
+        color: #fff;
+        background: #0058be;
+        font-size: 50px;
+        padding: 10px;
+        border-radius: 16px;
+        width: fit-content;
+      }
+
       .title {
-        color: #1e293b; // dark text
-        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        padding:20px 0 0 0;
+        color: #191c1e; // dark text
+        font-size: 38px;
         font-weight: 700;
         margin: 0 0 0.5rem 0;
         letter-spacing: -0.025em;
@@ -75,8 +92,11 @@
       }
 
       .subtitle {
-        font-size: 1rem;
-        color: #64748b; // gray subtitle
+        display: flex;
+        align-items: center;
+        padding:10px 0;
+        font-size: 20px;
+        color: #44474d;
         margin: 0;
         font-weight: 400;
 
@@ -115,11 +135,11 @@
 
       .form-input {
         width: 100%;
-        background: #f8fafc; // light input background
+        background: #ffffff; // light input background
         color: #1e293b; // text color
-        border: 1px solid #e2e8f0; // border color
+        border: 1px solid #cacbd2; // border color
         padding: 0.875rem 3rem 0.875rem 0.5rem;
-        border-radius: 12px;
+        border-radius: 10px;
         font-size: 1rem;
         transition: all 0.2s ease;
 
@@ -129,7 +149,7 @@
 
         &:focus {
           outline: none;
-          border-color: #2563eb; // focus blue
+          border-color: #0259c0; // focus blue
           box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
           transform: translateY(-1px);
         }
@@ -159,13 +179,13 @@
         justify-content: center;
 
         &:hover {
-          color: #2563eb;
+          color: #0259c0;
           background: rgba(37, 99, 235, 0.1);
         }
 
         &:focus {
           outline: none;
-          color: #2563eb;
+          color: #0259c0;
           background: rgba(37, 99, 235, 0.1);
         }
 
@@ -200,24 +220,11 @@
       }
     }
 
-    .forgot-password {
-      font-size: 0.875rem;
-      color: #2563eb; // dashboard link blue
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s ease;
-
-      &:hover {
-        color: #1d4ed8;
-        text-decoration: underline;
-      }
-    }
-
     // Login Button
     .login-button {
       width: 100%;
       padding: 0.875rem 1.5rem;
-      background: #2563eb; // dashboard primary blue
+      background: #0259c0; // dashboard primary blue
       color: #ffffff;
       border: none;
       border-radius: 12px;
@@ -230,7 +237,7 @@
       margin-bottom: 1.5rem;
 
       &:hover:not(:disabled) {
-        background: #1d4ed8;
+        background: #0259c0;
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
       }

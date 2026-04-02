@@ -63,32 +63,58 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
 
     try {
-        const admin = await Admin.findOne({username});
-        if (!admin) return res.status(404).json({error: 'Admin not found'});
+        if (!username || !password) {
+            return res.status(400).json({
+                error: 'Username and password are required'
+            });
+        }
+
+        const admin = await Admin.findOne({ username }).populate('gymId');
+
+        if (!admin) {
+            return res.status(404).json({
+                error: 'Admin not found'
+            });
+        }
 
         const isMatch = await bcrypt.compare(password, admin.password);
-        if (!isMatch) return res.status(400).json({error: 'Invalid password'});
 
-        const token = jwt.sign({
-            id: admin._id,
-            gymId: admin.gymId
-        }, 'secretKey', {expiresIn: '1h'});
+        if (!isMatch) {
+            return res.status(400).json({
+                error: 'Invalid password'
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                id: admin._id,
+                gymId: admin.gymId._id
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
 
         res.json({
             message: 'Login successful!',
-            token: token,
+            token,
             admin: {
                 id: admin._id,
                 username: admin.username,
-                gymId: admin.gymId
+                gymId: admin.gymId._id,
+                gymName: admin.gymId.gymName
             }
         });
+
     } catch (err) {
         console.error(err);
-        res.status(500).json({error: 'Server error'});
+
+        res.status(500).json({
+            error: 'Server error',
+            details: err.message
+        });
     }
 });
 
@@ -97,35 +123,55 @@ router.use(superAdminAuth);
 
 router.post('/', async (req, res) => {
     try {
-        const {username, password, gymId} = req.body;
+        const { username, password } = req.body;
 
-        if (!username || !password || !gymId) {
-            return res.status(400).json({error: 'All required fields must be provided'});
+        if (!username || !password) {
+            return res.status(400).json({
+                error: 'All required fields must be provided'
+            });
         }
 
-        const existingAdmin = await Admin.findOne({username});
+        const existingAdmin = await Admin.findOne({ username });
+
         if (existingAdmin) {
-            return res.status(400).json({error: 'username must be unique'});
+            return res.status(400).json({
+                error: 'username must be unique'
+            });
         }
 
-        const admin = new Admin({username, password, gymId});
+        const admin = new Admin({
+            username,
+            password,
+            gymId: req.gymId
+        });
+
         await admin.save();
 
         res.status(201).json(admin);
+
     } catch (err) {
-        res.status(500).json({error: 'Server error', details: err.message});
+        res.status(500).json({
+            error: 'Server error',
+            details: err.message
+        });
     }
 });
-
 // =====================
 // GET ALL ADMINS
 // =====================
 router.get('/', async (req, res) => {
     try {
-        const admins = await Admin.find();
+        const admins = await Admin.find({
+            gymId: req.gymId
+        });
+
         res.json(admins);
+
     } catch (err) {
-        res.status(500).json({error: 'Server error', details: err.message});
+        res.status(500).json({
+            error: 'Server error',
+            details: err.message
+        });
     }
 });
 
@@ -134,12 +180,24 @@ router.get('/', async (req, res) => {
 // =====================
 router.get('/:id', async (req, res) => {
     try {
-        const admin = await Admin.findById(req.params.id);
-        if (!admin) return res.status(404).json({error: 'Admin not found'});
+        const admin = await Admin.findOne({
+            _id: req.params.id,
+            gymId: req.gymId
+        });
+
+        if (!admin) {
+            return res.status(404).json({
+                error: 'Admin not found in this gym'
+            });
+        }
 
         res.json(admin);
+
     } catch (err) {
-        res.status(500).json({error: 'Server error', details: err.message});
+        res.status(500).json({
+            error: 'Server error',
+            details: err.message
+        });
     }
 });
 
@@ -148,26 +206,37 @@ router.get('/:id', async (req, res) => {
 // =====================
 router.put('/:id', async (req, res) => {
     try {
-        const {username, password, gymId} = req.body;
-        if (!username || !password || !gymId) {
-            return res.status(400).json({error: 'All required fields must be provided'});
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({
+                error: 'All required fields must be provided'
+            });
         }
 
-        const admin = await Admin.findById(req.params.id);
-        if (!admin) return res.status(404).json({error: 'Admin not found'});
+        const admin = await Admin.findOne({
+            _id: req.params.id,
+            gymId: req.gymId
+        });
+
+        if (!admin) {
+            return res.status(404).json({
+                error: 'Admin not found in this gym'
+            });
+        }
 
         admin.username = username;
         admin.password = password;
-        admin.gymId = gymId;
 
         await admin.save();
+
         res.json(admin);
+
     } catch (err) {
-        if (err.code === 11000) {
-            const field = Object.keys(err.keyValue)[0];
-            return res.status(400).json({error: `${field} must be unique`});
-        }
-        res.status(500).json({error: 'Server error', details: err.message});
+        res.status(500).json({
+            error: 'Server error',
+            details: err.message
+        });
     }
 });
 
@@ -176,12 +245,26 @@ router.put('/:id', async (req, res) => {
 // =====================
 router.delete('/:id', async (req, res) => {
     try {
-        const admin = await Admin.findByIdAndDelete(req.params.id);
-        if (!admin) return res.status(404).json({error: 'Admin not found'});
+        const admin = await Admin.findOneAndDelete({
+            _id: req.params.id,
+            gymId: req.gymId
+        });
 
-        res.json({message: 'Admin deleted successfully'});
+        if (!admin) {
+            return res.status(404).json({
+                error: 'Admin not found in this gym'
+            });
+        }
+
+        res.json({
+            message: 'Admin deleted successfully'
+        });
+
     } catch (err) {
-        res.status(500).json({error: 'Server error', details: err.message});
+        res.status(500).json({
+            error: 'Server error',
+            details: err.message
+        });
     }
 });
 

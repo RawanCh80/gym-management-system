@@ -1,44 +1,46 @@
 <div class="login-container">
-  <h1 class="login-title">Super Admin Portal</h1>
-
-  <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        formControlName="username"
-        placeholder="Enter your username"
-        [class.invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
-      />
-      <div class="error" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-        Username is required
-      </div>
-    </div>
-
-    <!-- Password -->
-    <div class="form-group">
-      <label for="password">Password</label>
-      <div class="password-wrapper">
+  <div class="login-form">
+    <h1 class="login-title">Portal Admin Access</h1>
+    <p class="subtitle">Manage gyms, admins , and system settings</p>
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="username">Username</label>
         <input
-          [type]="hideInputPassword ? 'password' : 'text'"
-          id="password"
-          formControlName="password"
-          placeholder="Enter your password"
-          [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          type="text"
+          id="username"
+          formControlName="username"
+          placeholder="Enter your username"
+          [class.invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
         />
-        <button type="button" class="toggle-password" (click)="hideInputPassword = !hideInputPassword">
-          {{ hideInputPassword ? 'Show' : 'Hide' }}
-        </button>
+        <div class="error" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          Username is required
+        </div>
       </div>
-      <div class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-        Password is required
-      </div>
-    </div>
 
-    <!-- Submit Button -->
-    <button type="submit" [disabled]="loginForm.invalid" class="login-button">
-      Login
-    </button>
-  </form>
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input
+            [type]="hideInputPassword ? 'password' : 'text'"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+          />
+          <button type="button" class="toggle-password" (click)="hideInputPassword = !hideInputPassword">
+            {{ hideInputPassword ? 'Show' : 'Hide' }}
+          </button>
+        </div>
+        <div class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          Password is required
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" [disabled]="loginForm.invalid" class="login-button">
+        Login
+      </button>
+    </form>
+  </div>
 </div>

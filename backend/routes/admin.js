@@ -3,14 +3,14 @@ const router = express.Router();
 const Admin = require('../models/Admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const authMiddleware = require('../middlewares/adminAuth');
+const Gym = require('../models/Gym');
 const superAdminAuth = require('../middlewares/superAdminAuth');
 console.log('Admin routes file loaded'); // Should appear in terminal when server starts
 
 
 // Test POST route
-router.post('/register', async (req, res) => {
-    const { username, password, gymId } = req.body;
+router.post('/register', superAdminAuth, async (req, res) => {
+    const {username, password, gymId} = req.body;
 
     try {
         // Validate required fields
@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
         }
 
         // Check if username already exists
-        const existingAdmin = await Admin.findOne({ username });
+        const existingAdmin = await Admin.findOne({username});
         if (existingAdmin) {
             return res.status(400).json({
                 error: 'Username already exists'
@@ -63,38 +63,32 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const {username, password} = req.body;
 
     try {
         if (!username || !password) {
-            return res.status(400).json({
-                error: 'Username and password are required'
-            });
+            return res.status(400).json({error: 'Username and password are required'});
         }
 
-        const admin = await Admin.findOne({ username }).populate('gymId');
+        const admin = await Admin.findOne({username}).populate('gymId');
 
         if (!admin) {
-            return res.status(404).json({
-                error: 'Admin not found'
-            });
+            return res.status(404).json({error: 'Admin not found'});
+        }
+
+        if (!admin.gymId) {
+            return res.status(400).json({error: 'Admin is not linked to a gym'});
         }
 
         const isMatch = await bcrypt.compare(password, admin.password);
-
         if (!isMatch) {
-            return res.status(400).json({
-                error: 'Invalid password'
-            });
+            return res.status(400).json({error: 'Invalid password'});
         }
 
         const token = jwt.sign(
-            {
-                id: admin._id,
-                gymId: admin.gymId._id
-            },
+            {id: admin._id, gymId: admin.gymId._id},
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            {expiresIn: '1h'}
         );
 
         res.json({
@@ -107,23 +101,75 @@ router.post('/login', async (req, res) => {
                 gymName: admin.gymId.gymName
             }
         });
-
     } catch (err) {
         console.error(err);
-
-        res.status(500).json({
-            error: 'Server error',
-            details: err.message
-        });
+        res.status(500).json({error: 'Server error', details: err.message});
     }
 });
+
+//
+// router.post('/login', async (req, res) => {
+//     const { username, password } = req.body;
+//
+//     try {
+//         if (!username || !password) {
+//             return res.status(400).json({
+//                 error: 'Username and password are required'
+//             });
+//         }
+//
+//         const admin = await Admin.findOne({ username }).populate('gymId');
+//
+//         if (!admin) {
+//             return res.status(404).json({
+//                 error: 'Admin not found'
+//             });
+//         }
+//
+//         const isMatch = await bcrypt.compare(password, admin.password);
+//
+//         if (!isMatch) {
+//             return res.status(400).json({
+//                 error: 'Invalid password'
+//             });
+//         }
+//
+//         const token = jwt.sign(
+//             {
+//                 id: admin._id,
+//                 gymId: admin.gymId._id
+//             },
+//             process.env.JWT_SECRET,
+//             { expiresIn: '1h' }
+//         );
+//
+//         res.json({
+//             message: 'Login successful!',
+//             token,
+//             admin: {
+//                 id: admin._id,
+//                 username: admin.username,
+//                 gymId: admin.gymId._id,
+//                 gymName: admin.gymId.gymName
+//             }
+//         });
+//
+//     } catch (err) {
+//         console.error(err);
+//
+//         res.status(500).json({
+//             error: 'Server error',
+//             details: err.message
+//         });
+//     }
+// });
 
 // this will work for the underfuntions
 router.use(superAdminAuth);
 
 router.post('/', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const {username, password} = req.body;
 
         if (!username || !password) {
             return res.status(400).json({
@@ -131,7 +177,7 @@ router.post('/', async (req, res) => {
             });
         }
 
-        const existingAdmin = await Admin.findOne({ username });
+        const existingAdmin = await Admin.findOne({username});
 
         if (existingAdmin) {
             return res.status(400).json({
@@ -139,9 +185,11 @@ router.post('/', async (req, res) => {
             });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const admin = new Admin({
             username,
-            password,
+            password: hashedPassword,
             gymId: req.gymId
         });
 
@@ -206,7 +254,7 @@ router.get('/:id', async (req, res) => {
 // =====================
 router.put('/:id', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const {username, password} = req.body;
 
         if (!username || !password) {
             return res.status(400).json({
@@ -226,7 +274,10 @@ router.put('/:id', async (req, res) => {
         }
 
         admin.username = username;
-        admin.password = password;
+        // Only hash if password changed
+        const hashedPassword = await bcrypt.hash(password, 10);
+        admin.password = hashedPassword;
+
 
         await admin.save();
 

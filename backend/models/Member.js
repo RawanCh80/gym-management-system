@@ -2,18 +2,28 @@ const mongoose = require('mongoose');
 
 const memberSchema = new mongoose.Schema({
     fullName: {type: String, required: true, unique: true},
-    phone: String,
+    phone: {type: String, required: true},
+    packages: [
+        {
+            packageName: {type: String, required: true},
+            durationDays: {type: Number, required: true},
+            numberOfSessions: {type: Number, required: true},
+            price: {type: Number, required: true},
 
-    membershipName: {type: String, required: false}, // e.g. "Monthly Plan"
-    durationDays: {type: Number, required: true},   // e.g. 30
-    numberOfSessions: {type: Number, required: true}, // e.g. 10
-    price: {type: Number, required: true},
+            startDate: {type: Date, required: true},
+            endDate: {type: Date, required: true},
 
-    membershipStart: {type: Date, required: true},
-    membershipEnd: Date,
-
-    isActive: {type: Boolean, default: true},
-    notes: String,
+            isActive: {type: Boolean, default: true},
+            notes: String,
+            createdAt: {
+                type: Date,
+                default: Date.now
+            },
+            updatedAt: {
+                type: Date
+            }
+        }
+    ],
     gymId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Gym',

@@ -27,7 +27,7 @@ export class MembersClient {
     return this.http.get<MemberInterface>(`${this.API_URL}/${id}`, this.authHeaders(token));
   }
 
-  public updateMember(id: string, updates: Partial<MemberInterface>, token: string): Observable<MemberInterface> {
+  public updateMember(id: string, updates: any, token: string): Observable<MemberInterface> {
     return this.http.put<MemberInterface>(`${this.API_URL}/${id}`, updates, this.authHeaders(token));
   }
 

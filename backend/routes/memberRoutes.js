@@ -10,117 +10,291 @@ router.get('/test', (req, res) => {
 })
 
 router.post('/', authMiddleware, async (req, res) => {
-    console.log("🔥 POST /members route hit");
     try {
         const {
             fullName,
-            email,
             phone,
-            membershipName,
+            packageName,
             durationDays,
             numberOfSessions,
             price,
-            membershipStart,
+            startDate,
             notes
         } = req.body;
 
-        const existingMember = await Member.findOne({ fullName });
-        if (existingMember) {
-            return res.status(400).json({ error: "Member with this fullName already exists" });
+        if (!fullName || !phone || !durationDays || !numberOfSessions || !price || !startDate) {
+            return res.status(400).json({
+                error: 'All required fields must be provided'
+            });
         }
 
-        const startDate = new Date(membershipStart);
+        const existingMember = await Member.findOne({
+            fullName,
+            gymId: req.admin.gymId
+        });
 
-        const endDate = new Date(startDate);
-        endDate.setUTCDate(endDate.getUTCDate() + durationDays);
+        if (existingMember) {
+            return res.status(400).json({
+                error: 'Member already exists in this gym'
+            });
+        }
+
+        const start = new Date(startDate);
+
+        const end = new Date(start);
+        end.setUTCDate(end.getUTCDate() + durationDays);
 
         const member = new Member({
             fullName,
-            email,
             phone,
-            membershipName,
-            durationDays,
-            numberOfSessions,
-            price,
-            membershipStart: startDate,
-            membershipEnd: endDate,
-            notes
+            gymId: req.admin.gymId,
+            packages: [
+                {
+                    packageName,
+                    durationDays,
+                    numberOfSessions,
+                    price,
+                    startDate: start,
+                    endDate: end,
+                    isActive: true,
+                    notes
+                }
+            ]
         });
 
         await member.save();
+
         res.status(201).json(member);
 
     } catch (err) {
-        res.status(400).json({error: err.message});
+        res.status(400).json({
+            error: err.message
+        });
     }
 });
 
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const members = await Member.find().sort({ createdAt: -1 });
+        const members = await Member.find({
+            gymId: req.admin.gymId
+        }).sort({createdAt: -1});
+
         res.json(members);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({
+            error: err.message
+        });
     }
 });
 
 router.get('/:id', authMiddleware, async (req, res) => {
     try {
-        const member = await Member.findById(req.params.id);
-        if (!member) return res.status(404).json({ error: "Member not found" });
+        const member = await Member.findOne({
+            _id: req.params.id,
+            gymId: req.admin.gymId
+        });
+
+        if (!member) {
+            return res.status(404).json({
+                error: 'Member not found'
+            });
+        }
+
         res.json(member);
+
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({
+            error: err.message
+        });
     }
 });
 
 router.put('/:id', authMiddleware, async (req, res) => {
     try {
-        const updates = req.body;
+        const member = await Member.findOne({
+            _id: req.params.id,
+            gymId: req.admin.gymId
+        });
 
-        // If membershipStart or durationDays are updated, recalc membershipEnd
-        if (updates.membershipStart || updates.durationDays) {
-            const member = await Member.findById(req.params.id);
-            if (!member) return res.status(404).json({ error: "Member not found" });
+        if (!member) {
+            return res.status(404).json({
+                error: 'Member not found'
+            });
+        }
 
-            if (updates.membershipStart) member.membershipStart = new Date(updates.membershipStart);
-            if (updates.durationDays) member.durationDays = updates.durationDays;
+        const { action, data } = req.body;
 
-            member.membershipEnd = new Date(member.membershipStart);
-            member.membershipEnd.setUTCDate(member.membershipEnd.getUTCDate() + member.durationDays);
+        if (!action || !data) {
+            return res.status(400).json({
+                error: 'action and data are required'
+            });
+        }
 
-            // merge other updates
-            Object.keys(updates).forEach(key => {
-                if (!['membershipStart', 'durationDays'].includes(key)) {
-                    member[key] = updates[key];
-                }
+        // =========================
+        // EDIT MEMBER INFO
+        // =========================
+        if (action === 'edit-member') {
+            const { fullName, phone } = data;
+
+            if (fullName) member.fullName = fullName;
+            if (phone) member.phone = phone;
+
+            await member.save();
+            return res.json(member);
+        }
+
+        // =========================
+        // EDIT EXISTING PACKAGE
+        // =========================
+        if (action === 'edit-package') {
+            const {
+                packageId,
+                packageName,
+                durationDays,
+                numberOfSessions,
+                price,
+                notes
+            } = data;
+
+            const pkg = member.packages.id(packageId);
+
+            if (!pkg) {
+                return res.status(404).json({
+                    error: 'Package not found'
+                });
+            }
+
+            if (packageName) pkg.packageName = packageName;
+            if (durationDays) pkg.durationDays = durationDays;
+            if (numberOfSessions) pkg.numberOfSessions = numberOfSessions;
+            if (price) pkg.price = price;
+            if (notes) pkg.notes = notes;
+
+            // recalculate end date only if duration changed
+            if (durationDays) {
+                pkg.endDate = new Date(pkg.startDate);
+                pkg.endDate.setUTCDate(
+                    pkg.endDate.getUTCDate() + pkg.durationDays
+                );
+            }
+
+            await member.save();
+            return res.json(member);
+        }
+
+        // =========================
+        // ADD NEW PACKAGE
+        // =========================
+        if (action === 'add-package') {
+            const {
+                packageName,
+                durationDays,
+                numberOfSessions,
+                price,
+                startDate,
+                notes
+            } = data;
+
+            if (
+                !packageName ||
+                !durationDays ||
+                !numberOfSessions ||
+                !price ||
+                !startDate
+            ) {
+                return res.status(400).json({
+                    error: 'Missing required package fields'
+                });
+            }
+
+            // deactivate current active package
+            member.packages.forEach(pkg => {
+                pkg.isActive = false;
+            });
+
+            const start = new Date(startDate);
+
+            const end = new Date(start);
+            end.setUTCDate(end.getUTCDate() + durationDays);
+
+            member.packages.push({
+                packageName,
+                durationDays,
+                numberOfSessions,
+                price,
+                startDate: start,
+                endDate: end,
+                isActive: true,
+                notes
             });
 
             await member.save();
             return res.json(member);
         }
 
-        // if no membershipStart/durationDays, just update normally
-        const updatedMember = await Member.findByIdAndUpdate(
-            req.params.id,
-            { $set: updates },
-            { new: true }
-        );
+        return res.status(400).json({
+            error: 'Invalid action'
+        });
 
-        if (!updatedMember) return res.status(404).json({ error: "Member not found" });
-        res.json(updatedMember);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({
+            error: err.message
+        });
     }
 });
-
+// this.membersClient.updateMember(
+//     id,
+//     {
+//         action: 'edit-member',
+//         data: {
+//             fullName: 'Rawan',
+//             phone: '70123456'
+//         }
+//     },
+//     token
+// );
+// this.membersClient.updateMember(
+//     id,
+//     {
+//         action: 'edit-package',
+//         data: {
+//             packageId: selectedPackageId,
+//             price: 150,
+//             notes: 'Renewed with discount'
+//         }
+//     },
+//     token
+// );
+//this.membersClient.updateMember(id,  {
+//     action: 'add-package',
+//     data: {
+//       packageName: 'Gold',
+//       durationDays: 30,
+//       numberOfSessions: 12,
+//       price: 100,
+//       startDate: new Date()
+//  } }, token);
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-        const deletedMember = await Member.findByIdAndDelete(req.params.id);
-        if (!deletedMember) return res.status(404).json({ error: "Member not found" });
-        res.json({ message: "Member deleted successfully" });
+        const deletedMember = await Member.findOneAndDelete({
+            _id: req.params.id,
+            gymId: req.admin.gymId
+        });
+
+        if (!deletedMember) {
+            return res.status(404).json({
+                error: 'Member not found'
+            });
+        }
+
+        res.json({
+            message: 'Member deleted successfully'
+        });
+
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({
+            error: err.message
+        });
     }
 });
 

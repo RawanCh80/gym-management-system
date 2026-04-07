@@ -107,63 +107,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-//
-// router.post('/login', async (req, res) => {
-//     const { username, password } = req.body;
-//
-//     try {
-//         if (!username || !password) {
-//             return res.status(400).json({
-//                 error: 'Username and password are required'
-//             });
-//         }
-//
-//         const admin = await Admin.findOne({ username }).populate('gymId');
-//
-//         if (!admin) {
-//             return res.status(404).json({
-//                 error: 'Admin not found'
-//             });
-//         }
-//
-//         const isMatch = await bcrypt.compare(password, admin.password);
-//
-//         if (!isMatch) {
-//             return res.status(400).json({
-//                 error: 'Invalid password'
-//             });
-//         }
-//
-//         const token = jwt.sign(
-//             {
-//                 id: admin._id,
-//                 gymId: admin.gymId._id
-//             },
-//             process.env.JWT_SECRET,
-//             { expiresIn: '1h' }
-//         );
-//
-//         res.json({
-//             message: 'Login successful!',
-//             token,
-//             admin: {
-//                 id: admin._id,
-//                 username: admin.username,
-//                 gymId: admin.gymId._id,
-//                 gymName: admin.gymId.gymName
-//             }
-//         });
-//
-//     } catch (err) {
-//         console.error(err);
-//
-//         res.status(500).json({
-//             error: 'Server error',
-//             details: err.message
-//         });
-//     }
-// });
-
 // this will work for the underfuntions
 router.use(superAdminAuth);
 

@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { MemberDetailsBo } from '../bo/member-details.bo';
 import { MembersClient } from '../../_clients/members/members.client';
@@ -6,6 +5,7 @@ import { MemberInterface } from '../../_clients/members/interface/members.interf
 import { MemberForUpdateDto } from '../dto/member-for-update.dto';
 import { MemberFormGroupInterface } from '../interfaces/member-form-group.interface';
 import { MemberForCreationDto } from '../dto/member-for-creation.dto';
+import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class MembersService {

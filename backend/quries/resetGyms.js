@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 const mongoURI = 'mongodb://127.0.0.1:27017/gymDB';
 
 const gymSchema = new mongoose.Schema({
-    gymName: { type: String, required: true, unique: true },
-    ownerName: { type: String, required: true },
-    phone: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    address: { type: String, required: true },
-    subscriptionPlan: { type: String, default: 'basic' },
-    isActive: { type: Boolean, default: true }
-}, { timestamps: true });
+    gymName: {type: String, required: true, unique: true},
+    ownerName: {type: String, required: true},
+    phone: {type: String, required: true},
+    email: {type: String, required: true},
+    address: {type: String, required: true},
+    subscriptionPlan: {type: String, default: 'basic'},
+    isActive: {type: Boolean, default: true}
+}, {timestamps: true});
 
 const Gym = mongoose.model('Gym', gymSchema);
 
@@ -20,7 +20,7 @@ async function resetGyms() {
         console.log('Connected to MongoDB');
 
         // Drop the collection if it exists
-        const collections = await mongoose.connection.db.listCollections({ name: 'gyms' }).toArray();
+        const collections = await mongoose.connection.db.listCollections({name: 'gyms'}).toArray();
         if (collections.length > 0) {
             await mongoose.connection.db.dropCollection('gyms');
             console.log('Dropped gyms collection');

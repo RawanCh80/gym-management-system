@@ -14,7 +14,7 @@
   </div>
 
   <div class="dashboard-content">
-    @if(filteredMembers?.length) {
+    @if(filteredMembers.length) {
       <ng-container>
         @for (member of filteredMembers; track member.id) {
           <div class="member-card">

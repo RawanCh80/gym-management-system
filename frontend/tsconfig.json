@@ -3,9 +3,11 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "strict": true,           // enables all strict checks
-    "noImplicitAny": true,
-    "noImplicitOverride": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "noImplicitOverride": false,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

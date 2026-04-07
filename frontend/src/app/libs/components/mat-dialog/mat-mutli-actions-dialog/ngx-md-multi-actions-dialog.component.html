@@ -1,0 +1,46 @@
+<div class="multi-action-header">
+	<div class="title">
+		{{ data.title }}
+	</div>
+	<mat-toolbar-row>
+		<div *ngIf="data?.faIcon"
+			 class="icon">
+			<fa-icon [icon]="data.faIcon"></fa-icon>
+		</div>
+		<div *ngIf="data?.imageUrl"
+			 class="icon">
+			<img [src]="data.imageUrl">
+		</div>
+	</mat-toolbar-row>
+</div>
+<div *ngIf="data.message"
+	 class="message">
+	{{ data.message }}
+</div>
+<div *ngIf="data?.dataList?.length > 0"
+	 class="data-list">
+	<div class="data-content">
+		<div *ngFor="let item of data.dataList"
+			 class="data-item">
+			<div class="data-item-label">
+				{{ item.key }}:
+			</div>
+			<div class="data-item-value">
+				{{ item.value }}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="action-buttons">
+	<div *ngFor="let action of data.action"
+		 class="action-content">
+		<button (click)="action.handler()"
+				[style.background-color]="action.color"
+				mat-raised-button>
+			<span>
+				{{ action.label }}
+			</span>
+		</button>
+	</div>
+</div>
+<empty-template *ngIf="!data.title && !data.message"></empty-template>

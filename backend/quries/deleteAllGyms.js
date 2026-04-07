@@ -4,14 +4,14 @@ const MONGO_URI = 'mongodb://127.0.0.1:27017/gymDB';
 
 // Define Gym schema
 const gymSchema = new mongoose.Schema({
-    gymName: { type: String, required: true, unique: true },
-    ownerName: { type: String, required: true },
-    phone: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    address: { type: String, required: true },
-    subscriptionPlan: { type: String, default: 'basic' },
-    isActive: { type: Boolean, default: true }
-}, { timestamps: true });
+    gymName: {type: String, required: true, unique: true},
+    ownerName: {type: String, required: true},
+    phone: {type: String, required: true},
+    email: {type: String, required: true},
+    address: {type: String, required: true},
+    subscriptionPlan: {type: String, default: 'basic'},
+    isActive: {type: Boolean, default: true}
+}, {timestamps: true});
 
 const Gym = mongoose.model('Gym', gymSchema);
 

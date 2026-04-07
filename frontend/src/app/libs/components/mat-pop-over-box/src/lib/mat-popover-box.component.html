@@ -1,0 +1,19 @@
+<div class="popover mat-popover">
+	<mat-action-list>
+		<ng-container *ngFor="let item of itemList">
+			<mat-list-item (click)="invokeHandler(item);"
+						   [class.disabled]="item?.disable">
+				<button [class.disabled]="item?.disable"
+						[disabled]="item?.disable">
+					<div *ngIf="item.faIcon"
+						 matListIcon>
+						<fa-icon [icon]="item.faIcon"></fa-icon>
+					</div>
+					<div class="action-label">
+						{{ item.label }}
+					</div>
+				</button>
+			</mat-list-item>
+		</ng-container>
+	</mat-action-list>
+</div>

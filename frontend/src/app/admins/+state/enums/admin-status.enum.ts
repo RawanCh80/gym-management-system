@@ -13,4 +13,6 @@ export enum AdminStatusEnum {
   deleteFailure = 'deleteFailure',
   approveSuccess = 'approveSuccess',
   approveFailure = 'approveFailure',
+  updatePasswordSuccess = 'updatePasswordSuccess',
+  updatePasswordFailure = 'updatePasswordFailure'
 }

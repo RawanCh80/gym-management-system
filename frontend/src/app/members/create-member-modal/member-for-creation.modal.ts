@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UUID } from 'angular2-uuid';
 import { Subject, Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ import { MembersActions } from '../+state/members.action';
   templateUrl: './member-for-creation.modal.html',
   styleUrl: './member-for-creation.modal.scss'
 })
+//
 export class MemberForCreationModal implements OnInit, OnDestroy {
   public uuidLoader = UUID.UUID();
   protected store = inject(Store);
@@ -27,61 +28,58 @@ export class MemberForCreationModal implements OnInit, OnDestroy {
   protected readonly FormGroup = FormGroup;
   private subscription = new Subscription();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: string }) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { token: string },
+              @Inject(PLATFORM_ID) private platformId: Object) {
     this.productTemplateForCreationFormGroup = new FormGroup({
       fullName: new FormControl('', Validators.required),
       phone: new FormControl('', Validators.required),
-      membershipStart: new FormControl(null, Validators.required),
-      isActive: new FormControl(true),
-      membershipName: new FormControl(''),
-      notes: new FormControl(''),
-      durationDays: new FormControl(0),
-      numberOfSessions: new FormControl(0),
-      price: new FormControl(0)
-      // ,
-      // sessions: new FormArray([
-      //   new FormGroup({
-      //     sessionNb: new FormControl('', Validators.required),
-      //     date: new FormControl('', Validators.required),
-      //     note: new FormControl('', Validators.required),
-      //   })
-      // ])
+      packages: new FormArray([
+        new FormGroup({
+          packageName: new FormControl(''),
+          durationDays: new FormControl(null, Validators.required),
+          numberOfSessions: new FormControl('', Validators.required),
+          price: new FormControl(null, Validators.required),
+          startDate: new FormControl(null, Validators.required),
+          notes: new FormControl(''),
+        })
+      ])
     });
   }
 
-  get productsFormArray(): FormArray {
-    return this.productTemplateForCreationFormGroup.get('sessions') as FormArray;
+  get packagesFormArray(): FormArray {
+    return this.productTemplateForCreationFormGroup.get('packages') as FormArray;
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
     this.memberTemplateStateSubscription();
   }
 
-  public addSession() {
-    this.productsFormArray.push(new FormGroup({
-      // sessionNb: new FormControl('', Validators.required),
-      //     date: new FormControl('', Validators.required),
-      //     note: new FormControl('', Validators.required),
-    }));
-  }
-
   public createMember() {
+    this.packagesFormArray.at(0).patchValue({
+      packageName: 'package 1'
+    });
     this.store.dispatch(MembersActions.createMember({
-        member: this.productTemplateForCreationFormGroup.value,
+        member: {
+          fullName: this.productTemplateForCreationFormGroup.value.fullName,
+          phone: this.productTemplateForCreationFormGroup.value.phone,
+          packages: this.packagesFormArray.value
+        },
         token: this.data.token
       })
     );
   }
 
-  public deleteProduct(index: number) {
-    this.productsFormArray.removeAt(index);
-  }
-
   public dismissModal() {
+    this.subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.productTemplateForCreationFormGroup.reset();
     return this.matDialog.closeAll();
   }
 

@@ -1,0 +1,41 @@
+@use "../../shared-scss/modal-header";
+@use "../../shared-scss/action-buttons.scss";
+
+.modal-container {
+  background: white;
+  border-radius: 16px;
+}
+
+.form {
+  padding: 24px 24px 0 24px;
+
+  .form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+      }
+    }
+
+    .error {
+      color: #ef4444;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
+}

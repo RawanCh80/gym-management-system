@@ -1,7 +1,7 @@
 ### Test GET
 GET http://localhost:3000/
 
-### Register Admin
+### Register AdminRoutes
 POST http://localhost:3000/api/admin/register
 Content-Type: application/json
 
@@ -11,7 +11,7 @@ Content-Type: application/json
   "password": "123456"
 }
 
-### Login Admin
+### Login AdminRoutes
 POST http://localhost:3000/api/admin/login
 Content-Type: application/json
 

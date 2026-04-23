@@ -17,77 +17,106 @@ const initialAdminDetailsState: AdminDetailsState = {
   error: null
 };
 export const adminDetailsReducer = createReducer<AdminDetailsState, Action>(initialAdminDetailsState,
-  on(AdminsActions.resetAdminDetailsStatus, (state) => {
-      return {
-        ...state,
-        status: AdminStatusEnum.pending
-      };
-    }
-  ),
+    on(AdminsActions.resetAdminDetailsStatus, (state) => {
+        return {
+          ...state,
+          status: AdminStatusEnum.pending
+        };
+      }
+    ),
 
-  on(AdminsActions.loadAdminDetails, (state) => {
-      return {
-        ...state,
-        status: AdminStatusEnum.loading
-      };
-    }
-  ),
-  on(AdminsActions.loadAdminDetailsSuccess, (state: AdminDetailsState, { admin }) => {
-      return {
-        ...state,
-        [ADMIN_DETAILS_KEY]: admin,
-        status: AdminStatusEnum.loadDetailsSuccess
-      };
-    }
-  ),
-  on(AdminsActions.loadAdminDetailsFailure, (state: AdminDetailsState, { error }) => {
-      return {
-        ...state,
-        status: AdminStatusEnum.loadError,
-        error: error
-      };
-    }
-  ),
+    on(AdminsActions.loadAdminDetails, (state) => {
+        return {
+          ...state,
+          status: AdminStatusEnum.loading
+        };
+      }
+    ),
+    on(AdminsActions.loadAdminDetailsSuccess, (state: AdminDetailsState, { admin }) => {
+        return {
+          ...state,
+          [ADMIN_DETAILS_KEY]: admin,
+          status: AdminStatusEnum.loadDetailsSuccess
+        };
+      }
+    ),
+    on(AdminsActions.loadAdminDetailsFailure, (state: AdminDetailsState, { error }) => {
+        return {
+          ...state,
+          status: AdminStatusEnum.loadError,
+          error: error
+        };
+      }
+    ),
 
-  on(AdminsActions.createAdmin, (state) => ({
-    ...state,
-    status: AdminStatusEnum.loading
-  })),
-  on(AdminsActions.createAdminSuccess, (state) => ({
-    ...state,
-    status: AdminStatusEnum.createSuccess
-  })),
-  on(AdminsActions.createAdminFailure, (state, { error }) => ({
-    ...state,
-    error,
-    status: AdminStatusEnum.createFailure
-  })),
+    on(AdminsActions.createAdmin, (state) => ({
+      ...state,
+      status: AdminStatusEnum.loading
+    })),
+    on(AdminsActions.createAdminSuccess, (state) => ({
+      ...state,
+      status: AdminStatusEnum.createSuccess
+    })),
+    on(AdminsActions.createAdminFailure, (state, { error }) => ({
+      ...state,
+      error,
+      status: AdminStatusEnum.createFailure
+    })),
 
-  on(AdminsActions.updateAdmin, (state) => ({
-    ...state,
-    status: AdminStatusEnum.loading
-  })),
-  on(AdminsActions.updateAdminSuccess, (state) => ({
-    ...state,
-    status: AdminStatusEnum.updateSuccess
-  })),
-  on(AdminsActions.updateAdminFailure, (state, { error }) => ({
-    ...state,
-    error,
-    status: AdminStatusEnum.updateFailure
-  })),
+    on(AdminsActions.updateAdmin, (state) => ({
+      ...state,
+      status: AdminStatusEnum.loading
+    })),
+    on(AdminsActions.updateAdminSuccess, (state) => ({
+      ...state,
+      status: AdminStatusEnum.updateSuccess
+    })),
+    on(AdminsActions.updateAdminFailure, (state, { error }) => ({
+      ...state,
+      error,
+      status: AdminStatusEnum.updateFailure
+    })),
 
-  on(AdminsActions.deleteAdmin, (state) => ({
-    ...state,
-    status: AdminStatusEnum.loading
-  })),
-  on(AdminsActions.deleteAdminSuccess, (state) => ({
-    ...state,
-    status: AdminStatusEnum.deleteSuccess
-  })),
-  on(AdminsActions.deleteAdminFailure, (state, { error }) => ({
-    ...state,
-    error,
-    status: AdminStatusEnum.deleteFailure
-  }))
-);
+    on(AdminsActions.updateAdminPassword, (state) => ({
+      ...state,
+      status: AdminStatusEnum.loading
+    })),
+    on(AdminsActions.updateAdminPasswordSuccess, (state) => ({
+      ...state,
+      status: AdminStatusEnum.updatePasswordSuccess
+    })),
+    on(AdminsActions.updateAdminPasswordFailure, (state, { error }) => ({
+      ...state,
+      error,
+      status: AdminStatusEnum.updatePasswordFailure
+    })),
+
+    on(AdminsActions.updateAdminPasswordBySuperAdmin, (state) => ({
+      ...state,
+      status: AdminStatusEnum.loading
+    })),
+    on(AdminsActions.updateAdminPasswordBySuperAdminSuccess, (state) => ({
+      ...state,
+      status: AdminStatusEnum.updatePasswordSuccess
+    })),
+    on(AdminsActions.updateAdminPasswordBySuperAdminFailure, (state, { error }) => ({
+      ...state,
+      error,
+      status: AdminStatusEnum.updatePasswordFailure
+    })),
+
+    on(AdminsActions.deleteAdmin, (state) => ({
+      ...state,
+      status: AdminStatusEnum.loading
+    })),
+    on(AdminsActions.deleteAdminSuccess, (state) => ({
+      ...state,
+      status: AdminStatusEnum.deleteSuccess
+    })),
+    on(AdminsActions.deleteAdminFailure, (state, { error }) => ({
+      ...state,
+      error,
+      status: AdminStatusEnum.deleteFailure
+    }))
+  )
+;

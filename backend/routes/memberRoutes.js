@@ -11,18 +11,9 @@ router.get('/test', (req, res) => {
 
 router.post('/', authMiddleware, async (req, res) => {
     try {
-        const {
-            fullName,
-            phone,
-            packageName,
-            durationDays,
-            numberOfSessions,
-            price,
-            startDate,
-            notes
-        } = req.body;
+        const { fullName, phone, packages } = req.body;
 
-        if (!fullName || !phone || !durationDays || !numberOfSessions || !price || !startDate) {
+        if (!fullName || !phone || !packages || !packages.length) {
             return res.status(400).json({
                 error: 'All required fields must be provided'
             });
@@ -30,7 +21,7 @@ router.post('/', authMiddleware, async (req, res) => {
 
         const existingMember = await Member.findOne({
             fullName,
-            gymId: req.admin.gymId
+            gymId: req.gymId
         });
 
         if (existingMember) {
@@ -39,25 +30,26 @@ router.post('/', authMiddleware, async (req, res) => {
             });
         }
 
-        const start = new Date(startDate);
+        const pkg = packages[0];
 
+        const start = new Date(pkg.startDate);
         const end = new Date(start);
-        end.setUTCDate(end.getUTCDate() + durationDays);
+        end.setUTCDate(end.getUTCDate() + pkg.durationDays);
 
         const member = new Member({
             fullName,
             phone,
-            gymId: req.admin.gymId,
+            gymId: req.gymId,
             packages: [
                 {
-                    packageName,
-                    durationDays,
-                    numberOfSessions,
-                    price,
+                    packageName: pkg.packageName,
+                    durationDays: pkg.durationDays,
+                    numberOfSessions: pkg.numberOfSessions,
+                    price: pkg.price,
                     startDate: start,
                     endDate: end,
                     isActive: true,
-                    notes
+                    notes: pkg.notes
                 }
             ]
         });
@@ -76,7 +68,7 @@ router.post('/', authMiddleware, async (req, res) => {
 router.get('/', authMiddleware, async (req, res) => {
     try {
         const members = await Member.find({
-            gymId: req.admin.gymId
+            gymId: req.gymId
         }).sort({createdAt: -1});
 
         res.json(members);
@@ -122,7 +114,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
             });
         }
 
-        const { action, data } = req.body;
+        const {action, data} = req.body;
 
         if (!action || !data) {
             return res.status(400).json({
@@ -134,7 +126,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
         // EDIT MEMBER INFO
         // =========================
         if (action === 'edit-member') {
-            const { fullName, phone } = data;
+            const {fullName, phone} = data;
 
             if (fullName) member.fullName = fullName;
             if (phone) member.phone = phone;
@@ -278,7 +270,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     try {
         const deletedMember = await Member.findOneAndDelete({
             _id: req.params.id,
-            gymId: req.admin.gymId
+            gymId: req.gymId
         });
 
         if (!deletedMember) {

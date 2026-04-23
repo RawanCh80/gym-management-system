@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 // Import admin routes
-const adminRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/adminRoutes');
 // Use admin routes
 
 app.use('/admins', adminRoutes);
@@ -34,3 +34,4 @@ app.get('/', (req, res) => res.send('Gym Backend is running 💪'));
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+module.exports = mongoose;

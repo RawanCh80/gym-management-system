@@ -13,7 +13,7 @@ export class AdminsEffect {
     this.actions$.pipe(
       ofType(AdminsActions.loadAdmins),
       switchMap((action) =>
-        this.adminsService.getAdmins(action.token).pipe(
+        this.adminsService.getAdmins(action.token, action.gymId).pipe(
           map((adminsList: AdminItemBo[]) =>
             AdminsActions.loadAdminsSuccess({ admins: adminsList })
           ),
@@ -55,7 +55,7 @@ export class AdminsEffect {
                 return [
                   AdminsActions.deleteAdminSuccess(),
                   AdminsActions.resetAdminDetailsStatus(),
-                  AdminsActions.loadAdmins({ token: action.token })
+                  AdminsActions.loadAdmins({ token: action.token, gymId: action.gymId })
                 ];
               }),
               catchError((error) => {
@@ -79,7 +79,7 @@ export class AdminsEffect {
                 return [
                   AdminsActions.updateAdminSuccess(),
                   AdminsActions.resetAdminDetailsStatus(),
-                  AdminsActions.loadAdmins({ token: action.token })
+                  AdminsActions.loadAdmins({ token: action.token, gymId: adminDetailsBo.gymId })
                 ];
               }),
               catchError((error) => {
@@ -102,7 +102,7 @@ export class AdminsEffect {
                 return [
                   AdminsActions.createAdminSuccess(),
                   AdminsActions.resetAdminDetailsStatus(),
-                  AdminsActions.loadAdmins({ token: action.token }),
+                  AdminsActions.loadAdmins({ token: action.token, gymId: action.admin.gymId }),
                 ];
               }),
               catchError((error) => {
@@ -111,5 +111,37 @@ export class AdminsEffect {
             );
         })
       )
+  );
+
+  public $updateAdminPassword = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdminsActions.updateAdminPassword),
+      switchMap((action) => {
+        return this.adminsService
+          .updateAdminPasswordByHim(action.id, action.passwords, action.token)
+          .pipe(
+            map(() => AdminsActions.updateAdminPasswordSuccess()),
+            catchError((error) =>
+              of(AdminsActions.updateAdminPasswordFailure({ error }))
+            )
+          );
+      })
+    )
+  );
+
+  public $updatePasswordBySuperAdmin = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AdminsActions.updateAdminPasswordBySuperAdmin),
+      switchMap((action) => {
+        return this.adminsService
+          .updatePasswordBySuperAdmin(action.id, action.newPassword, action.token)
+          .pipe(
+            map(() => AdminsActions.updateAdminPasswordSuccess()),
+            catchError((error) =>
+              of(AdminsActions.updateAdminPasswordBySuperAdminFailure({ error }))
+            )
+          );
+      })
+    )
   );
 }

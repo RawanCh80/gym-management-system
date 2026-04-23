@@ -1,6 +1,6 @@
 export interface AdminInterface {
-  _id?: string;
+  email: string;
   username: string;
-  password?: string;
-  gymId?: string;
+  password: string;
+  gymId: string;
 }

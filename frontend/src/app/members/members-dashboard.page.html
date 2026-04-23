@@ -1,0 +1,50 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <input
+      type="text"
+      placeholder="Search members..."
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (input)="onSearchMembers()"
+    />
+    <button class="btn add-member" (click)="onAddMember()">+ Add Member</button>
+  </div>
+
+  <div class="dashboard-content">
+    @if (filteredMembers.length) {
+      <ng-container>
+        <div class="members-grid">
+          @for (member of filteredMembers; track member.id) {
+            <div class="member-card">
+              <div class="member-name">
+                <div class="names">
+                  <div class="name"> {{ member?.fullName ?? '' }}</div>
+                </div>
+                <div class="menu-wrapper">
+                  <div class="ellipsis-btn" (click)="presentPopoverActions($event,member)">
+                    <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+                  </div>
+                </div>
+              </div>
+              <div class="member-phone-number item">
+                <fa-icon [icon]="['fas','phone']"></fa-icon>
+                <div class="phone-number">
+                  {{ member?.phone }}
+                </div>
+              </div>
+              @if (member.id) {
+                <button class="view-details"
+                        (click)="viewDetailsMember(member.id)">
+                  <div class="view-details-text">
+                    View Details
+                  </div>
+                  <fa-icon [icon]="['fas','arrow-right']"></fa-icon>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </ng-container>
+    }
+  </div>
+</div>

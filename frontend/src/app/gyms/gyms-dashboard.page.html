@@ -1,0 +1,58 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <input
+      type="text"
+      placeholder="Search gyms..."
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (input)="onSearchGyms()"
+    />
+    <button class="btn add-gym" (click)="onAddGym()">+ Add Gym</button>
+  </div>
+
+  <div class="dashboard-content">
+    @if (filteredGyms.length) {
+      <ng-container>
+        <div class="gyms-grid">
+          @for (gym of filteredGyms; track gym.id) {
+            <div class="gym-card">
+              <div class="gym-name">
+                <div class="names">
+                  <div class="name"> {{ gym.gymName }}</div>
+                  <div class="owner-name">{{ gym.ownerName }}</div>
+                </div>
+                <div class="menu-wrapper">
+               <div class="ellipsis-btn" (click)="presentPopoverActions($event,gym)">
+                    <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+               </div>
+                </div>
+              </div>
+              <div class="gym-phone-number item">
+                <fa-icon [icon]="['fas','phone']"></fa-icon>
+                <div class="phone-number">
+                  {{ gym?.phone }}
+                </div>
+              </div>
+
+              <div class="gym-location item">
+                <fa-icon [icon]="['fas','location-dot']"></fa-icon>
+                <div class="location">
+                  {{ gym?.address }}
+                </div>
+              </div>
+              @if (gym.id) {
+                <button class="view-details"
+                        (click)="viewDetailsGym(gym.id)">
+                  <div class="view-details-text">
+                    View Details
+                  </div>
+                  <fa-icon [icon]="['fas','arrow-right']"></fa-icon>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </ng-container>
+    }
+  </div>
+</div>

@@ -7,7 +7,7 @@ import { MembersActions } from './members.action';
 import { MemberItemBo } from '../bo/member-item.bo';
 
 @Injectable()
-export class  MembersEffect {
+export class MembersEffect {
   private actions$ = inject(Actions);
   private membersService = inject(MembersService);
   public loadMembers$ = createEffect(() =>
@@ -74,7 +74,11 @@ export class  MembersEffect {
         ofType(MembersActions.updateMember),
         switchMap((action) => {
           return this.membersService
-            .updateMember(action.id, action.member, action.token)
+            .updateMember(
+              action.id,
+              action.member,
+              action.token
+            )
             .pipe(
               switchMap((memberDetailsBo: MemberDetailsBo) => {
                 return [

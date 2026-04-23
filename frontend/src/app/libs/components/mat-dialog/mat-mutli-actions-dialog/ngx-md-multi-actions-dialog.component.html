@@ -1,46 +1,54 @@
 <div class="multi-action-header">
-	<div class="title">
-		{{ data.title }}
-	</div>
-	<mat-toolbar-row>
-		<div *ngIf="data?.faIcon"
-			 class="icon">
-			<fa-icon [icon]="data.faIcon"></fa-icon>
-		</div>
-		<div *ngIf="data?.imageUrl"
-			 class="icon">
-			<img [src]="data.imageUrl">
-		</div>
-	</mat-toolbar-row>
+  <div class="title">
+    {{ data.title }}
+  </div>
+  <mat-toolbar-row>
+    @if (data?.faIcon) {
+      <div class="icon">
+        <fa-icon [icon]="data.faIcon"></fa-icon>
+      </div>
+    }
+    @if (data?.imageUrl) {
+      <div class="icon">
+        <img [src]="data.imageUrl">
+      </div>
+    }
+  </mat-toolbar-row>
 </div>
-<div *ngIf="data.message"
-	 class="message">
-	{{ data.message }}
-</div>
-<div *ngIf="data?.dataList?.length > 0"
-	 class="data-list">
-	<div class="data-content">
-		<div *ngFor="let item of data.dataList"
-			 class="data-item">
-			<div class="data-item-label">
-				{{ item.key }}:
-			</div>
-			<div class="data-item-value">
-				{{ item.value }}
-			</div>
-		</div>
-	</div>
-</div>
+@if (data.message) {
+  <div class="message">
+    {{ data.message }}
+  </div>
+}
+@if (data?.dataList?.length > 0) {
+  <div class="data-list">
+    <div class="data-content">
+      @for (item of data.dataList; track item.key; ) {
+        <div class="data-item">
+          <div class="data-item-label">
+            {{ item.key }}:
+          </div>
+          <div class="data-item-value">
+            {{ item.value }}
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
 <div class="action-buttons">
-	<div *ngFor="let action of data.action"
-		 class="action-content">
-		<button (click)="action.handler()"
-				[style.background-color]="action.color"
-				mat-raised-button>
+  @for (action of data.action; track action.label; ) {
+    <div class="action-content">
+      <button (click)="action.handler()"
+              [style.background-color]="action.color"
+              mat-raised-button>
 			<span>
 				{{ action.label }}
 			</span>
-		</button>
-	</div>
+      </button>
+    </div>
+  }
 </div>
-<empty-template *ngIf="!data.title && !data.message"></empty-template>
+@if (!data.title && !data.message) {
+  <empty-template></empty-template>
+}

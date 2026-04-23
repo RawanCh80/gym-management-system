@@ -1,5 +1,5 @@
 import { MemberFormGroupInterface } from '../interfaces/member-form-group.interface';
-import { MemberInterface } from '../../_clients/members/interface/members.interface';
+import { MemberDetailsInterface } from '../../_clients/members/interface/member-details.interface';
 
 export class MemberForCreationDto {
   private readonly formData: MemberFormGroupInterface;
@@ -8,16 +8,11 @@ export class MemberForCreationDto {
     this.formData = formData;
   }
 
-  toJSON(): MemberInterface {
+  toJSON(): MemberDetailsInterface {
     return {
       fullName: this.formData.fullName,
       phone: this.formData.phone,
-      membershipName: this.formData.membershipName ?? '',
-      durationDays: this.formData.durationDays,
-      numberOfSessions: this.formData.numberOfSessions,
-      price: this.formData.price,
-      membershipStart: this.formData.membershipStart,
-      notes: this.formData.notes
+      packages: this.formData.packages
     };
   }
 }

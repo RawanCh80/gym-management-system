@@ -1,7 +1,7 @@
-import { Component, ElementRef, ViewChild, ChangeDetectionStrategy, signal, computed, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, Input, signal, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 interface FileValidationResult {
@@ -44,9 +44,9 @@ export class NgxMdImagePicker {
   private selectedFile: File | null = null;
 
   constructor(
-    private readonly matDialogRef: MatDialogRef<NgxMdImagePicker>,
-    private readonly translateService: TranslateService
-  ) {}
+    private readonly matDialogRef: MatDialogRef<NgxMdImagePicker>
+  ) {
+  }
 
   ngOnInit(): void {
     // Initialize with existing image if provided
@@ -178,7 +178,7 @@ export class NgxMdImagePicker {
     };
 
     reader.onerror = () => {
-      this.errorMessage.set(this.translateService.instant('imagePicker.readError'));
+      this.errorMessage.set('Error reading file. Please try again with a different image');
       this.isLoading.set(false);
     };
 
@@ -239,7 +239,7 @@ export class NgxMdImagePicker {
     if (!this.ACCEPTED_FORMATS.includes(file.type)) {
       return {
         isValid: false,
-        errorMessage: this.translateService.instant('imagePicker.unsupportedFormat')
+        errorMessage: 'Invalid file format. Please select a PNG, JPG, or JPEG image'
       };
     }
 
@@ -247,7 +247,7 @@ export class NgxMdImagePicker {
     if (file.size > this.MAX_FILE_SIZE) {
       return {
         isValid: false,
-        errorMessage: this.translateService.instant('imagePicker.fileTooLarge')
+        errorMessage: 'File size is too large. Please select an image smaller than 5MB'
       };
     }
 

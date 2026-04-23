@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { GymInterface } from './interface/gym.interface';
+import { GymModel } from './models/gym.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -15,30 +16,30 @@ export class GymsClient {
     return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
   }
 
-  public createGym(gym: GymInterface, token: string): Observable<GymInterface> {
-    return this.http.post<GymInterface>(
+  public createGym(gymDto: GymInterface, token: string): Observable<GymModel> {
+    return this.http.post<GymModel>(
       this.API_URL,
-      gym,
+      gymDto,
       this.authHeaders(token)
     );
   }
 
-  public getAllGyms(token: string): Observable<GymInterface[]> {
-    return this.http.get<GymInterface[]>(
+  public getAllGyms(token: string): Observable<GymModel[]> {
+    return this.http.get<GymModel[]>(
       this.API_URL,
       this.authHeaders(token)
     );
   }
 
-  public getGymById(id: string, token: string): Observable<GymInterface> {
-    return this.http.get<GymInterface>(
+  public getGymById(id: string, token: string): Observable<GymModel> {
+    return this.http.get<GymModel>(
       `${this.API_URL}/${id}`,
       this.authHeaders(token)
     );
   }
 
-  public updateGym(id: string, gym: GymInterface, token: string): Observable<GymInterface> {
-    return this.http.put<GymInterface>(
+  public updateGym(id: string, gym: GymInterface, token: string): Observable<GymModel> {
+    return this.http.put<GymModel>(
       `${this.API_URL}/${id}`,
       gym,
       this.authHeaders(token)

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { LoginFormInterface } from '../../login/interface/login-form.interface';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { AuthSuperAdminInterface } from './auth-super-admin.interface';
 
 @Injectable({ providedIn: 'root' })
 
@@ -11,7 +11,7 @@ export class SuperAdminLoginClient {
   constructor(private http: HttpClient) {
   }
 
-  public login(loginFormValue: LoginFormInterface): Observable<any> {
+  public login(loginFormValue: AuthSuperAdminInterface): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, loginFormValue);
   }
 }

@@ -4,11 +4,12 @@ import { MatToolbarRow } from '@angular/material/toolbar';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatAlertWithButtonsInterface } from './interface/mat-alert-with-buttons-dialog.interface';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { MatButton } from '@angular/material/button';
 
 @Component({
 	selector: 'ngx-md-alert-dialog-with-buttons',
 	standalone: true,
-	imports: [CommonModule, MatToolbarRow, FaIconComponent],
+  imports: [CommonModule, MatToolbarRow, FaIconComponent, MatButton],
 	templateUrl: './ngx-md-alert-with-buttons.dialog.html',
 	styleUrl: './ngx-md-alert-with-buttons.dialog.scss'
 })

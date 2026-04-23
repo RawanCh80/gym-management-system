@@ -1,0 +1,148 @@
+<div class="gym-details-page-container">
+  <div class="gym-form-container">
+    <form [formGroup]="gymDetailsFormGroup" class="gym-form">
+      <div class="form-row full-width">
+        <div class="form-group">
+          <label>GYM NAME <span>*</span></label>
+          <input
+            type="text"
+            formControlName="gymName"
+            placeholder="e.g. Iron Peak Fitness"
+          />
+        </div>
+      </div>
+
+      <div class="form-row two-columns">
+        <div class="form-group">
+          <label>OWNER NAME</label>
+          <input
+            type="text"
+            formControlName="ownerName"
+            placeholder="Full Legal Name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>SUBSCRIPTION PLAN</label>
+          <select formControlName="subscriptionPlan">
+            <option value="basic">Basic</option>
+            <option value="premium">Premium</option>
+            <option value="enterprise">Enterprise</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row two-columns">
+        <div class="form-group">
+          <label>PHONE NUMBER <span>*</span></label>
+          <input
+            type="text"
+            formControlName="phone"
+            placeholder="+1 (555) 000-0000"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>EMAIL ADDRESS <span>*</span></label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="contact@gymname.com"
+          />
+        </div>
+      </div>
+
+      <div class="form-row full-width">
+        <div class="form-group">
+          <label>PHYSICAL ADDRESS <span>*</span></label>
+          <textarea
+            rows="4"
+            formControlName="address"
+            placeholder="Street name, City, State, ZIP code"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="status-container">
+        <div class="status-left">
+          <div class="status-icon">⏻</div>
+          <div class="status-text">
+            <h4>Active Status</h4>
+            <p>The gym will be visible in public directories immediately.</p>
+          </div>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" formControlName="isActive"/>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button
+          (click)="onBack()"
+          type="button" class="cancel-btn">Cancel
+        </button>
+        <button
+          type="submit"
+          (click)="updateGym()"
+          class="submit-btn"
+          [disabled]="gymDetailsFormGroup.invalid">
+          Update Gym
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="admins-container">
+    <div class="admins-header">
+      <div class="admins-header-title">Gym Administrators</div>
+      <button class="btn admins-header-add-admin" (click)="onAddAdmin()">+ Add AdminRoutes</button>
+    </div>
+    <ng-container *ngrxLet="adminStateSelected$ | async as adminState">
+      @if (adminState[ADMINS_KEY]?.length > 0) {
+        <table mat-table
+               [dataSource]="adminState[ADMINS_KEY]"
+               class="table-style">
+          <ng-container matColumnDef="userName">
+            <th *matHeaderCellDef
+                class="row-cell"
+                mat-header-cell>
+              username
+            </th>
+            <td mat-cell
+                *matCellDef="let admin"
+                class="data">
+              {{ admin.username }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th *matHeaderCellDef mat-header-cell
+                class="row-cell">
+              Actions
+            </th>
+            <td mat-cell
+                *matCellDef="let admin"
+                class="data icons">
+              <fa-icon [icon]="['fas', 'trash']" (click)="presentDeleteAlert(admin)"></fa-icon>
+              <fa-icon [icon]="['fas', 'ellipsis-v']" (click)="presentPopoverActions($event,admin.id)"></fa-icon>
+            </td>
+          </ng-container>
+          <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+        </table>
+        <!--        @for (admin of adminState[ADMINS_KEY]; track admin.id) {-->
+          <!--          <div class="admin-card">-->
+          <!--            <div class="admin-card-name">-->
+          <!--              Username : {{ admin.username }}-->
+          <!--            </div>-->
+          <!--            <div class="admin-card-actions"></div>-->
+          <!--          </div>-->
+          <!--        }-->
+
+      } @else {
+        No Admins Created , click the button to register new admins !
+      }
+    </ng-container>
+  </div>
+</div>

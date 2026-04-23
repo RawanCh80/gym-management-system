@@ -1,0 +1,18 @@
+.header {
+  align-items: center;
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+  color: white;
+  background: #0d1c32;
+
+  &__title {
+    font-size: 18px;
+    color: #FFFFFF;
+  }
+
+  &__close-icon {
+    font-size: 26px;
+    cursor: pointer;
+  }
+}

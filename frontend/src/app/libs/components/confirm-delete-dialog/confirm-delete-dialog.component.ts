@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, inject, Input, Output } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -19,7 +19,8 @@ export class ConfirmDeleteDialogComponent {
       title: string;
       message: string;
     }
-  ) {}
+  ) {
+  }
 
   public confirm(): void {
     console.log('CONFIRM CLICKED');

@@ -1,13 +1,13 @@
 # gym-management-system
 Full-stack Gym Management System (Angular + Express) for managing members, subscriptions, and gym operations.
 
-his project is a simple **Gym Management System** with an **Admin login system** built with Node.js, Express, MongoDB, and Angular frontend.
+his project is a simple **Gym Management System** with an **AdminRoutes login system** built with Node.js, Express, MongoDB, and Angular frontend.
 
 ---
 
 ## **Features**
 
-- Admin registration and login
+- AdminRoutes registration and login
 - Password hashing with bcrypt
 - JWT authentication for protected routes
 - Dashboard access for authenticated admins

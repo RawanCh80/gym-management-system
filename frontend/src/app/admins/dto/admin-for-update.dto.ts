@@ -1,17 +1,18 @@
-import { AdminFormGroupInterface } from '../interfaces/admin-form-group.interface';
-import { AdminInterface } from '../../_clients/admins/interface/admin.interface';
+import { UpdateAdminFormGroupInterface } from '../interfaces/update-admin-form-group.interface';
+import { UpdateAdminInterface } from '../../_clients/admins/interface/update-admin.interface';
 
 export class AdminForUpdateDto {
-  private readonly formData: AdminFormGroupInterface;
+  private readonly formData: UpdateAdminFormGroupInterface;
 
-  constructor(formData: AdminFormGroupInterface) {
+  constructor(formData: UpdateAdminFormGroupInterface) {
     this.formData = formData;
   }
 
-  toJSON(): AdminInterface {
+  toJSON(): UpdateAdminInterface {
     return {
       username: this.formData.username,
-      password: this.formData.password,
+      email: this.formData.email,
+      gymId: this.formData.gymId
     };
   }
 }

@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginPage } from './login-page/login.page';
-import { DashboardPage } from './dashboard-page/dashboard.page';
-import { PortalAdminLoginPage } from './portal-admin-login/portal-admin-login.page';
-import { PortalAdminDashboardPage } from './portal-admin-dashboard/portal-admin-dashboard.page';
+import { LoginPage } from './admins/login/login.page';
+import { DashboardPage } from './admins/dashboard-page/dashboard.page';
+import { PortalAdminLoginPage } from './portal-admin/login/portal-admin-login.page';
 import { GymsDashboardPage } from './gyms/gyms-dashboard.page';
-import { CreateNewGymPage } from './gyms/add-gym-page/create-new-gym.page';
+import { CreateNewGymPage } from './gyms/create-new-gym-page/create-new-gym.page';
+import { GymDetailsPage } from './gyms/gym-details-page/gym-details.page';
+import { PortalAdminDashboardPage } from './portal-admin/portal-admin-dashboard.page';
+import { MembersDashboardPage } from './members/members-dashboard.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,14 +30,18 @@ export const routes: Routes = [
         path: '',
         component: PortalAdminDashboardPage
       },
-      // {
-      //   path: 'gyms/:id',
-      //   component: PortalAdminDashboardPage
-      // }
-      ]
+      {
+        path: 'gyms/:id',
+        component: GymDetailsPage
+      }
+    ]
   },
   {
     path: 'dashboard',
-    component: DashboardPage
+    component: DashboardPage,
+    children: [
+      { path: '', redirectTo: 'members', pathMatch: 'full' },
+      { path: 'members', component: MembersDashboardPage }
+    ]
   }
 ];

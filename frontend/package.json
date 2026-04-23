@@ -33,6 +33,8 @@
     "angular2-uuid": "^1.1.1",
     "express": "^5.1.0",
     "lodash": "^4.18.1",
+    "ngx-skeleton-loader": "^12.0.0",
+    "ngx-toastr": "^20.0.5",
     "ngx-ui-loader": "^19.0.0",
     "ngx-ui-switch": "^16.1.0",
     "ngx-ui-tour-md-menu": "^16.0.0",

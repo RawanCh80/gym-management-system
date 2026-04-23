@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { AdminForUpdateDto } from '../dto/admin-for-update.dto';
-import { AdminFormGroupInterface } from '../interfaces/admin-form-group.interface';
-import { AdminForCreationDto } from '../dto/admin-for-creation.dto';
+import { UpdateAdminFormGroupInterface } from '../interfaces/update-admin-form-group.interface';
 import { AdminsClient } from '../../_clients/admins/admins.client';
-import { AdminInterface } from '../../_clients/admins/interface/admin.interface';
 import { AdminItemBo } from '../bo/admin-item.bo';
+import { RegisterDto } from '../../reigister-page/dto/register.dto';
+import { AdminModel } from '../../_clients/admins/models/admin.model';
+import { AdminFormGroupInterface } from '../interfaces/admin-form-group.interface';
+import { UpdatePasswordAdminFormGroupInterface } from '../interfaces/update-password-admin-form-group.interface';
+import { AdminPasswordUpdateDto } from '../dto/admin-password-update.dto';
 
 @Injectable({ providedIn: 'root' })
 export class AdminsService {
@@ -13,15 +16,15 @@ export class AdminsService {
   }
 
   public createAdmin(formGroupValue: AdminFormGroupInterface, token: string): Observable<any> {
-    const adminDto = new AdminForCreationDto(formGroupValue);
-    return this.adminsClient.createAdmin(adminDto.toJSON(), token);
+    const adminDto = new RegisterDto(formGroupValue);
+    return this.adminsClient.registerAdmin(adminDto.toJSON(), token);
   }
 
-  public getAdmins(token: string): Observable<AdminItemBo[]> {
+  public getAdmins(token: string, gymId: string): Observable<AdminItemBo[]> {
     return this.adminsClient
-      .getAllAdmins(token)
+      .getAllAdmins(token, gymId)
       .pipe(
-        map((admins: AdminInterface[]) =>
+        map((admins: AdminModel[]) =>
           admins.map(admin => new AdminItemBo(admin))
         )
       );
@@ -31,14 +34,23 @@ export class AdminsService {
     return this.adminsClient
       .getAdminById(id, token)
       .pipe(
-        map((admin: AdminInterface) =>
+        map((admin: AdminModel) =>
           new AdminItemBo(admin))
       );
   }
 
-  public updateAdmin(adminId: string, formGroupValue: AdminFormGroupInterface, token: string): Observable<any> {
+  public updateAdmin(adminId: string, formGroupValue: UpdateAdminFormGroupInterface, token: string): Observable<any> {
     const adminDto = new AdminForUpdateDto(formGroupValue);
     return this.adminsClient.updateAdmin(adminId, adminDto.toJSON(), token);
+  }
+
+  public updateAdminPasswordByHim(adminId: string, formGroupValue: UpdatePasswordAdminFormGroupInterface, token: string): Observable<any> {
+    const adminDto = new AdminPasswordUpdateDto(formGroupValue);
+    return this.adminsClient.updateAdminPassword(adminId, adminDto.toJSON(), token);
+  }
+
+  public updatePasswordBySuperAdmin(adminId: string, newPassword: string, token: string): Observable<any> {
+    return this.adminsClient.updatePasswordBySuperAdmin(adminId, newPassword, token);
   }
 
   public deleteAdmin(adminId: string, token: string): Observable<void> {

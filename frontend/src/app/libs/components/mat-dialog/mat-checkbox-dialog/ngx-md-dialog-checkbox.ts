@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 
 import { MatCheckboxDialogInterface, MatCheckboxInterface } from './mat-checkbox-dialog.interface';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { MatIcon } from '@angular/material/icon';
-import { NgForOf, NgIf } from '@angular/common';
 import { MatDivider } from '@angular/material/divider';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatButton } from '@angular/material/button';
@@ -19,9 +17,7 @@ import { CheckboxStateEnum } from '../enum/checkbox-state.enum';
   imports: [
     MatIcon,
     MatDialogContent,
-    NgIf,
     MatDivider,
-    NgForOf,
     MatCheckbox,
     MatDialogActions,
     MatButton,

@@ -1,11 +1,12 @@
 import { map, Observable } from 'rxjs';
 import { MemberDetailsBo } from '../bo/member-details.bo';
 import { MembersClient } from '../../_clients/members/members.client';
-import { MemberInterface } from '../../_clients/members/interface/members.interface';
-import { MemberForUpdateDto } from '../dto/member-for-update.dto';
 import { MemberFormGroupInterface } from '../interfaces/member-form-group.interface';
 import { MemberForCreationDto } from '../dto/member-for-creation.dto';
 import { Injectable } from '@angular/core';
+import { MemberDetailsModel } from '../../_clients/members/models/Member-details.model';
+import { MemberItemBo } from '../bo/member-item.bo';
+import { MemberForUpdateDto } from '../dto/member-for-update.dto';
 
 @Injectable({ providedIn: 'root' })
 export class MembersService {
@@ -17,12 +18,12 @@ export class MembersService {
     return this.membersClient.createMember(memberDto.toJSON(), token);
   }
 
-  public getMembers(token: string): Observable<MemberDetailsBo[]> {
+  public getMembers(token: string): Observable<MemberItemBo[]> {
     return this.membersClient
       .getAllMembers(token)
       .pipe(
-        map((members: MemberInterface[]) =>
-          members.map(member => new MemberDetailsBo(member))
+        map((members: MemberItemBo[]) =>
+          members.map(member => new MemberItemBo(member))
         )
       );
   }
@@ -31,13 +32,13 @@ export class MembersService {
     return this.membersClient
       .getMemberById(id, token)
       .pipe(
-        map((member: MemberInterface) =>
+        map((member: MemberDetailsModel) =>
           new MemberDetailsBo(member))
       );
   }
 
   public updateMember(memberId: string, formGroupValue: MemberFormGroupInterface, token: string): Observable<any> {
-    const memberDto = new MemberForUpdateDto(formGroupValue);
+    const memberDto = new MemberForUpdateDto('edit-member',formGroupValue);
     return this.membersClient.updateMember(memberId, memberDto.toJSON(), token);
   }
 

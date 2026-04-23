@@ -1,4 +1,4 @@
-import { GymInterface } from '../../_clients/gyms/interface/gym.interface';
+import { GymModel } from '../../_clients/gyms/models/gym.model';
 
 export class GymDetailsBo {
   id: string;
@@ -12,7 +12,7 @@ export class GymDetailsBo {
   createdAt?: Date;
   updatedAt?: Date;
 
-  constructor(gymModel: GymInterface) {
+  constructor(gymModel: GymModel) {
     this.id = gymModel._id ?? '';
     this.gymName = gymModel.gymName;
     this.ownerName = gymModel.ownerName;

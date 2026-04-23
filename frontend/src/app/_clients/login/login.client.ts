@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { LoginFormInterface } from '../../login/interface/login-form.interface';
 import { HttpClient } from '@angular/common/http';
-import { RegisterFormInterface } from '../../reigister-page/interface/register-form.interface';
+import { AuthInterface } from './auth.interface';
 
 @Injectable({ providedIn: 'root' })
 
@@ -12,11 +11,11 @@ export class LoginClient {
   constructor(private http: HttpClient) {
   }
 
-  public login(loginFormValue: LoginFormInterface): Observable<any> {
+  public login(loginFormValue: AuthInterface): Observable<any> {
     return this.http.post(`${this.API_URL}/login`, loginFormValue);
   }
 
-  public register(registerFormValue: RegisterFormInterface): Observable<any> {
-    return this.http.post(`${this.API_URL}/register`, registerFormValue);
-  }
+  // public register(registerFormValue: RegisterFormInterface): Observable<any> {
+  //   return this.http.post(`${this.API_URL}/register`, registerFormValue, this.authHeaders(token));
+  // }
 }

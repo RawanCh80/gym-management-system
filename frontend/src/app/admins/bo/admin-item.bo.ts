@@ -1,13 +1,15 @@
-import { AdminInterface } from '../../_clients/admins/interface/admin.interface';
+import { AdminModel } from '../../_clients/admins/models/admin.model';
 
 export class AdminItemBo {
   id: string;
+  email: string;
   username: string;
   gymId?: string;
 
-  constructor(gymModel: AdminInterface) {
-    this.id = gymModel._id ?? '';
-    this.gymId = gymModel.gymId;
-    this.username = gymModel.username;
+  constructor(adminModel: AdminModel) {
+    this.id = adminModel._id ?? '';
+    this.gymId = adminModel.gymId;
+    this.username = adminModel.username;
+    this.email = adminModel.email;
   }
 }

@@ -15,6 +15,9 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { GymsEffect } from './gyms/+state/gyms.effect';
 import { GYMS_KEY, gymsReducer } from './gyms/+state/gyms.reducer';
 import { GYM_DETAILS_KEY, gymDetailsReducer } from './gyms/+state/gyms-details.reducer';
+import { ADMINS_KEY, adminsReducer } from './admins/+state/admins.reducer';
+import { ADMIN_DETAILS_KEY, adminDetailsReducer } from './admins/+state/admins-details.reducer';
+import { AdminsEffect } from './admins/+state/admins.effect';
 
 export function initializeFaIconLibrary(library: FaIconLibrary) {
   return () => {
@@ -24,7 +27,8 @@ export function initializeFaIconLibrary(library: FaIconLibrary) {
 
 export const bootstrapEffectList = [
   MembersEffect,
-  GymsEffect
+  GymsEffect,
+  AdminsEffect
 ]
 
 export const reducers = {
@@ -32,6 +36,8 @@ export const reducers = {
   [MEMBERS_KEY]: membersReducer,
   [GYMS_KEY]: gymsReducer,
   [GYM_DETAILS_KEY]: gymDetailsReducer,
+  [ADMINS_KEY]: adminsReducer,
+  [ADMIN_DETAILS_KEY]: adminDetailsReducer
 }
 
 export const appConfig: ApplicationConfig = {

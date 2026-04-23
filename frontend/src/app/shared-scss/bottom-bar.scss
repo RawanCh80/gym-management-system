@@ -1,0 +1,31 @@
+.bottom-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0 24px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	height: 64px;
+	background-color: var(--charcoal-color);
+
+	.spacer {
+		flex: 1;
+	}
+
+	.action-button {
+		background-color: var(--charcoal-color);
+		color: #fff !important;
+		margin-left: 16px;
+	}
+
+	.action-button:disabled {
+		color: #787878 !important;
+		cursor: not-allowed;
+	}
+
+	.action-button:not(:disabled) {
+		color: #FFF !important;
+	}
+}
